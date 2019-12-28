@@ -40,10 +40,10 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         progressBar = findViewById(R.id.progressBar);
 
-//        if (mAuth.getCurrentUser() != null) {
-//            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-//            finish();
-//        }
+        if (mAuth.getCurrentUser() != null) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+        }
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(RegisterActivity.this, "User created", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
-
+                            finish();
                         }
                         else {
                             Toast.makeText(RegisterActivity.this, "Error occured: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -133,5 +133,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void setProgressBar(ProgressBar progressBar) {
         this.progressBar = progressBar;
+    }
+
+    public void goToLogin(View view) {
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        finish();
     }
 }

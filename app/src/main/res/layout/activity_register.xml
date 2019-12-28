@@ -90,5 +90,6 @@
         app:layout_constraintEnd_toEndOf="@+id/register_button"
         app:layout_constraintStart_toStartOf="@+id/register_button"
         app:layout_constraintTop_toBottomOf="@+id/register_button"
-        app:layout_constraintVertical_bias="0.663" />
+        app:layout_constraintVertical_bias="0.663"
+        android:onClick="goToLogin"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

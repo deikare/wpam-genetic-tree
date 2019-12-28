@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">GenTree</string>
     <string name="register_title">Register here!</string>
-    <string name="username_hint">Enter username here...</string>
-    <string name="email_hint">Enter your email here...</string>
-    <string name="password">Enter password here...</string>
+    <string name="username_hint">Username</string>
+    <string name="email_hint">Email</string>
+    <string name="password">Password</string>
     <string name="register_button">Register!</string>
     <string name="from_register_to_login">Already registered? Click here to login</string>
+
+    <string name="logout_button">Logout</string>
 </resources>
