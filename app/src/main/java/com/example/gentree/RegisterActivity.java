@@ -14,9 +14,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -25,6 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
     private TextView goToLogin;
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         progressBar = findViewById(R.id.progressBar);
+        db = FirebaseFirestore.getInstance();
 
         if (mAuth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -48,8 +60,14 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String currentEmail = getEmail().getText().toString();
-                String currentPasswd = getPasswd().getText().toString().trim();
+                final String currentEmail = getEmail().getText().toString();
+                final String currentPasswd = getPasswd().getText().toString().trim();
+                final String currentUsername = getUsername().getText().toString();
+
+                if (TextUtils.isEmpty(currentUsername)) {
+                    username.setError("Email is required");
+                    return;
+                }
 
                 if (TextUtils.isEmpty(currentEmail)) {
                     email.setError("Email is required");
@@ -67,6 +85,29 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(RegisterActivity.this, "User created", Toast.LENGTH_SHORT).show();
+                            Map<String, Object> user = new HashMap<>();
+
+                            Objects.requireNonNull(Objects.requireNonNull(task.getResult()).getUser()).updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(currentUsername).build());
+
+                            user.put("userID", Objects.requireNonNull(task.getResult().getUser()).getUid());
+                            user.put("username", currentUsername);
+                            user.put("email", currentEmail);
+                            user.put("password", currentPasswd);
+
+                            db.collection("users")
+                                    .add(user)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+
+                                        }
+                                    });
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             finish();
                         }
