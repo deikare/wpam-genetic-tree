@@ -5,9 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,7 +14,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -46,7 +43,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addNewRecord(View view) {
-        Map<String, Object> user = new HashMap<>();
+        startActivity(new Intent(getApplicationContext(), AddNewNodeActivity.class));
+        finish();
+
+        /*Map<String, Object> user = new HashMap<>();
         user.put("first", "Ada");
         user.put("last", "Lovelace");
         user.put("born", 1815);
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Nie dodano", Toast.LENGTH_SHORT).show();
 
                     }
-                });
+                });*/
     }
 
     public void readRecord(View view) {

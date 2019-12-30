@@ -9,4 +9,10 @@
 
     <string name="logout_button">Logout</string>
     <string name="from_login_to_register">Need an account? Click here to register</string>
+
+    <string name="node_name">Name</string>;
+    <string name="node_last_name">Last name</string>
+    <string name="node_date_of_birth">Date of birth</string>
+    <string name="node_date_of_death">Date of death</string>
+    <string name="node_button_add">Add node</string>
 </resources>
