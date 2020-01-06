@@ -15,4 +15,8 @@
     <string name="node_date_of_birth">Date of birth</string>
     <string name="node_date_of_death">Date of death</string>
     <string name="node_button_add">Add node</string>
+    <string name="node_place_of_residence">Place of residence</string>
+    <string name="node_work">Work</string>
+    <string name="education">Education</string>
+    <string name="node_description">Description</string>
 </resources>
