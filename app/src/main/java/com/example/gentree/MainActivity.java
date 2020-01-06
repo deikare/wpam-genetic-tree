@@ -21,6 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore db;
@@ -45,27 +46,6 @@ public class MainActivity extends AppCompatActivity {
     public void addNewRecord(View view) {
         startActivity(new Intent(getApplicationContext(), AddNewNodeActivity.class));
         finish();
-
-        /*Map<String, Object> user = new HashMap<>();
-        user.put("first", "Ada");
-        user.put("last", "Lovelace");
-        user.put("born", 1815);
-
-        db.collection("users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(getApplicationContext(), "Dodano", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "Nie dodano", Toast.LENGTH_SHORT).show();
-
-                    }
-                });*/
     }
 
     public void readRecord(View view) {
@@ -76,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful())
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                            for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
                                 textView.setText(documentSnapshot.getId());
                             }
                         else {
@@ -84,5 +64,10 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    public void deleteRecord(View view) {
+        startActivity(new Intent(getApplicationContext(), DeleteRecordActivity.class));
+        finish();
     }
 }

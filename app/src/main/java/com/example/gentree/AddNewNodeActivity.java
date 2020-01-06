@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -27,9 +28,10 @@ import java.util.Objects;
 
 public class AddNewNodeActivity extends AppCompatActivity {
 
-    private EditText name, lastName, dateOfBirth, dateOfDeath;
+    private EditText name, lastName, dateOfBirth, dateOfDeath, work, location, education, description;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,11 @@ public class AddNewNodeActivity extends AppCompatActivity {
         lastName = findViewById(R.id.add_node_last_name);
         dateOfBirth = findViewById(R.id.add_node_date_of_birth);
         dateOfDeath = findViewById(R.id.add_node_date_of_death);
+        work = findViewById(R.id.add_node_work);
+        location = findViewById(R.id.add_node_location);
+        education = findViewById(R.id.add_node_education);
+        description = findViewById(R.id.add_node_description);
+
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -60,6 +67,10 @@ public class AddNewNodeActivity extends AppCompatActivity {
                 final String currentLastName = lastName.getText().toString();
                 final String dob = dateOfBirth.getText().toString();
                 final String dod = dateOfDeath.getText().toString();
+                final String currentWork = work.getText().toString();
+                final String currentEducation = education.getText().toString();
+                final String currentLocation = location.getText().toString();
+                final String currentDescription = description.getText().toString();
 
                 final String userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
                 db.collection("users")
@@ -72,11 +83,20 @@ public class AddNewNodeActivity extends AppCompatActivity {
                                     ArrayList<String> userList = new ArrayList<>();
                                     userList.add(userID);
 
-                                    Map<String, String> attributes = new HashMap<>();
+                                    Map<String, Object> attributes = new HashMap<>();
                                     attributes.put(NodeKeys.NAME, currentName);
                                     attributes.put(NodeKeys.LAST_NAME, currentLastName);
                                     attributes.put(NodeKeys.DATE_OF_BIRTH, dob);
-                                    attributes.put(NodeKeys.DATE_OF_DEATH, dod);
+//                                    attributes.put(LifeEventsKeys.DATE_OF_DEATH, dod);
+
+                                    Map<String, String> lifeEvents = new HashMap<>();
+                                    lifeEvents.put(LifeEventsKeys.DATE_OF_DEATH, dod);
+                                    lifeEvents.put(LifeEventsKeys.WORK, currentWork);
+                                    lifeEvents.put(LifeEventsKeys.EDUCATION, currentEducation);
+                                    lifeEvents.put(LifeEventsKeys.LOCATION, currentLocation);
+                                    lifeEvents.put(LifeEventsKeys.DESCRIPTION, currentDescription);
+
+                                    attributes.put(NodeKeys.LIFE_EVENTS, lifeEvents);
 
                                     Map<String, Object> newNode = new HashMap<>();
                                     newNode.put("user_list", userList);
