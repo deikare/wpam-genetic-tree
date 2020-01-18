@@ -2,6 +2,7 @@ package com.example.gentree;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class NodeData {
     private Map<String, Object> attributes;
@@ -17,7 +18,7 @@ public class NodeData {
 
         result.put(attributes.getClass().getName(), attributes);
         result.put(lifeEvents.getClass().getName(), lifeEvents);
-
+        
         return result;
     }
 
@@ -35,5 +36,19 @@ public class NodeData {
 
     public void setLifeEvents(Map<String, String> lifeEvents) {
         this.lifeEvents = lifeEvents;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NodeData nodeData = (NodeData) o;
+        return Objects.equals(attributes, nodeData.attributes) &&
+                Objects.equals(lifeEvents, nodeData.lifeEvents);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(attributes, lifeEvents);
     }
 }
