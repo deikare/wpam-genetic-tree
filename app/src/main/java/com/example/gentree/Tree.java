@@ -6,6 +6,7 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.traverse.DepthFirstIterator;
 import org.jgrapht.traverse.TopologicalOrderIterator;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,7 +14,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class Tree {
+@SuppressWarnings("serial") //With this annotation we are going to hide compiler warnings
+public class Tree implements Serializable {
     private Graph<Node, DefaultEdge> graph;
 
     public Tree() {
@@ -132,6 +134,13 @@ public class Tree {
     }
 
     public static Node findNodeByNumber(ArrayList<Node> nodes, int number) {
+        for (Node node : nodes)
+            if (number == node.getNumber())
+                return node;
+        return null;
+    }
+
+    public static Node findNodeByNumber(Set<Node> nodes, int number) {
         for (Node node : nodes)
             if (number == node.getNumber())
                 return node;

@@ -19,4 +19,14 @@
     <string name="node_work">Work</string>
     <string name="education">Education</string>
     <string name="node_description">Description</string>
+
+    <string name="first_node_name">Name</string>;
+    <string name="first_node_last_name">Last name</string>
+    <string name="first_node_date_of_birth">Date of birth</string>
+    <string name="first_node_date_of_death">Date of death</string>
+    <string name="first_node_button_add">Add node</string>
+    <string name="first_node_place_of_residence">Place of residence</string>
+    <string name="first_node_work">Work</string>
+    <string name="first_education">Education</string>
+    <string name="first_node_description">Description</string>
 </resources>

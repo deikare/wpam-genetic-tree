@@ -108,7 +108,10 @@ public class RegisterActivity extends AppCompatActivity {
 
                                         }
                                     });
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            Tree userTree = new Tree();
+                            Intent newIntent = new Intent(getApplicationContext(), FirstNodeActivity.class);
+                            newIntent.putExtra("tree", userTree);
+                            startActivity(newIntent);
                             finish();
                         }
                         else {

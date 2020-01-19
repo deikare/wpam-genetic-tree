@@ -39,7 +39,6 @@ public class AddNewNodeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_new_node);
 
 
-
         name = findViewById(R.id.add_node_name);
         lastName = findViewById(R.id.add_node_last_name);
         dateOfBirth = findViewById(R.id.add_node_date_of_birth);
@@ -83,30 +82,27 @@ public class AddNewNodeActivity extends AppCompatActivity {
                                     ArrayList<String> userList = new ArrayList<>();
                                     userList.add(userID);
 
-                                    Map<String, Object> attributes = new HashMap<>();
+                                    Map<String, String> attributes = new HashMap<>();
                                     attributes.put(NodeKeys.NAME, currentName);
                                     attributes.put(NodeKeys.LAST_NAME, currentLastName);
                                     attributes.put(NodeKeys.DATE_OF_BIRTH, dob);
-//                                    attributes.put(LifeEventsKeys.DATE_OF_DEATH, dod);
+                                    attributes.put(NodeKeys.DATE_OF_DEATH, dod);
+                                    attributes.put(NodeKeys.EDUCATION, currentEducation);
+                                    attributes.put(NodeKeys.WORK, currentWork);
+                                    attributes.put(NodeKeys.LOCATION, currentLocation);
+                                    attributes.put(NodeKeys.DESCRIPTION, currentDescription);
 
-                                    Map<String, String> lifeEvents = new HashMap<>();
-                                    lifeEvents.put(LifeEventsKeys.DATE_OF_DEATH, dod);
-                                    lifeEvents.put(LifeEventsKeys.WORK, currentWork);
-                                    lifeEvents.put(LifeEventsKeys.EDUCATION, currentEducation);
-                                    lifeEvents.put(LifeEventsKeys.LOCATION, currentLocation);
-                                    lifeEvents.put(LifeEventsKeys.DESCRIPTION, currentDescription);
-
-                                    attributes.put(NodeKeys.LIFE_EVENTS, lifeEvents);
-
-                                    Map<String, Object> newNode = new HashMap<>();
-                                    newNode.put("user_list", userList);
-                                    newNode.put("attributes", attributes);
+                                    Node newNode = new Node(attributes, 0);
 //                                    Node newNode = new Node(userList, attributes);
+                                    Intent i = getIntent();
+                                    Tree userTree = (Tree)i.getSerializableExtra("tree");
+                                    userTree.AddPatron(null, newNode);
 
+                                    String result = "2";
                                     for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
                                         documentSnapshot.getReference()
                                                 .collection("nodes")
-                                                .add(newNode)
+                                                .add(result)
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {

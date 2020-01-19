@@ -4,8 +4,10 @@ public interface NodeKeys {
     String NAME = "name";
     String LAST_NAME = "last_name";
     String DATE_OF_BIRTH = "date_of_birth";
-    //String DATE_OF_DEATH = "date_of_death";
-    String PARENTS = "parents";
-    String CHILDREN = "children";
-    String LIFE_EVENTS = "life_events";
+    String DATE_OF_DEATH = "date_of_death";
+    String EDUCATION = "education";
+    String WORK = "work";
+    String DESCRIPTION = "description";
+    String LOCATION = "location";
 }
+
