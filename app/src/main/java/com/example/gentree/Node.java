@@ -13,6 +13,9 @@ public class Node {
     private int number;
     private int numberofParent;
 
+    public Node() {
+    }
+
     public Node(int number) {
         this.number = number;
         attributes = new HashMap<>();

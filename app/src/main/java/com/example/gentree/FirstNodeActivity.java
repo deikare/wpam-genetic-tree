@@ -88,24 +88,16 @@ public class FirstNodeActivity extends AppCompatActivity {
                                     attributes.put(NodeKeys.LOCATION, currentLocation);
                                     attributes.put(NodeKeys.DESCRIPTION, currentDescription);
 
-                                    Map<String, String> nodea = new HashMap<>();
-                                    nodea.put("d", "d");
                                     Node newNode = new Node(attributes, 0);
+                                    newNode.setNumberofParent(-1);
                                     Intent i = getIntent();
                                     Tree userTree = (Tree)i.getSerializableExtra("tree");
                                     userTree.AddPatron(null, newNode);
 
-                                    Map<String, String> treeSnap = new HashMap<>();
-                                    Node newNode2 = new Node(nodea, 1);
-                                    userTree.AddPatron(newNode, newNode2);
-                                    String result = new String(userTree.toJson());
-//                                    treeSnap.put("data", userTree.toJson());
-                                    for (Node node : userTree.getGraph().vertexSet())
-                                        treeSnap.put("node" + node.getNumber(), node.toJson(node.getNumberofParent()));
                                     for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
                                         documentSnapshot.getReference()
                                                 .collection("treeSnap")
-                                                .add(treeSnap)
+                                                .add(newNode)
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {

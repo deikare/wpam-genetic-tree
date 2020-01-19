@@ -28,7 +28,7 @@ import java.util.Objects;
 
 public class AddNewNodeActivity extends AppCompatActivity {
 
-    private EditText name, lastName, dateOfBirth, dateOfDeath, work, location, education, description;
+    private EditText name, lastName, dateOfBirth, dateOfDeath, work, location, education, description, parentNumber, nodeNumber;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
 
@@ -47,6 +47,8 @@ public class AddNewNodeActivity extends AppCompatActivity {
         location = findViewById(R.id.add_node_location);
         education = findViewById(R.id.add_node_education);
         description = findViewById(R.id.add_node_description);
+        parentNumber = findViewById(R.id.add_node_parentNo);
+        nodeNumber = findViewById(R.id.add_node_node_number);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -70,6 +72,8 @@ public class AddNewNodeActivity extends AppCompatActivity {
                 final String currentEducation = education.getText().toString();
                 final String currentLocation = location.getText().toString();
                 final String currentDescription = description.getText().toString();
+                final String currentNodeNo = nodeNumber.getText().toString();
+                final String currentParentNo = parentNumber.getText().toString();
 
                 final String userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
                 db.collection("users")
@@ -92,17 +96,15 @@ public class AddNewNodeActivity extends AppCompatActivity {
                                     attributes.put(NodeKeys.LOCATION, currentLocation);
                                     attributes.put(NodeKeys.DESCRIPTION, currentDescription);
 
-                                    Node newNode = new Node(attributes, 0);
-//                                    Node newNode = new Node(userList, attributes);
-                                    Intent i = getIntent();
-                                    Tree userTree = (Tree)i.getSerializableExtra("tree");
-                                    userTree.AddPatron(null, newNode);
+                                    int no1 = Integer.parseInt(currentNodeNo);
+                                    Node newNode = new Node(attributes, no1);
+                                    no1 = Integer.parseInt(currentParentNo);
+                                    newNode.setNumberofParent(no1);
 
-                                    String result = "2";
                                     for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
                                         documentSnapshot.getReference()
-                                                .collection("nodes")
-                                                .add(result)
+                                                .collection("treeSnap")
+                                                .add(newNode)
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {

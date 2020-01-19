@@ -147,4 +147,24 @@ public class Tree implements Serializable {
         return null;
     }
 
+    public static Tree treeFromNodesArray(ArrayList<Node> nodes) {
+        Tree newTree = new Tree();
+
+        nodes.sort(new Comparator<Node>() {
+            @Override
+            public int compare(Node node, Node t1) {
+                int result = node.getNumberofParent() - t1.getNumberofParent();
+                return Integer.compare(result, 0);
+            }
+        });
+
+        for (Node node : nodes) {
+            Node child = null;
+            if (node.getNumber() != 0)
+                child = Tree.findNodeByNumber(nodes, node.getNumberofParent());
+            newTree.AddPatron(child, node);
+        }
+        return newTree;
+    }
+
 }

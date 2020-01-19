@@ -19,6 +19,8 @@
     <string name="node_work">Work</string>
     <string name="education">Education</string>
     <string name="node_description">Description</string>
+    <string name="node_parentNumber">NumberOfParent</string>
+    <string name="node_number">Number of node</string>
 
     <string name="first_node_name">Name</string>;
     <string name="first_node_last_name">Last name</string>
