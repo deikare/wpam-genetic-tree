@@ -108,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
                                                     }*/
                                                     Tree newTree = Tree.treeFromNodesArray(nodes);
                                                     System.out.println(newTree.toJson());
+                                                    /*System.out.println("dasz rade");
+                                                    System.out.println("wierze w ciebie kotku <3");
+                                                    System.out.println("o chuj o chuj o chuj!");*/
                                                 }
                                             }
                                         });
@@ -160,6 +163,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void deleteRecord(View view) {
         startActivity(new Intent(getApplicationContext(), DeleteRecordActivity.class));
+        finish();
+    }
+
+    public void editRecord(View view) {
+        startActivity(new Intent(getApplicationContext(), EditNodeActivity.class));
         finish();
     }
 }
