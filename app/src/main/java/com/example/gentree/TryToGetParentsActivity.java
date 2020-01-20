@@ -96,10 +96,14 @@ public class TryToGetParentsActivity extends AppCompatActivity {
                                                                                                                 Tree subjectedTree = Tree.treeFromNodesArray(nodes);
                                                                                                                 ArrayList<Node> protoParents = Tree.searchForParents(testedNode, subjectedTree.getGraph());
                                                                                                                 if (protoParents != null) {
-                                                                                                                    for (Node parent : protoParents) {
-                                                                                                                        parent.setNumber(newTree.getMaxNodeNumber() + 1);
-                                                                                                                        parent.setNumberofParent(testedNode.getNumber());
-                                                                                                                        newTree.AddPatron(testedNode, parent);
+                                                                                                                    if (newTree.getNodeParentsAmount(testedNode) < 2) {
+                                                                                                                        for (Node parent : protoParents) {
+                                                                                                                            if (newTree.getNodeParentsAmount(testedNode) < 2) {
+                                                                                                                                parent.setNumber(newTree.getMaxNodeNumber() + 1);
+                                                                                                                                parent.setNumberofParent(testedNode.getNumber());
+                                                                                                                                newTree.AddPatron(testedNode, parent);
+                                                                                                                            }
+                                                                                                                        }
                                                                                                                     }
 
                                                                                                                     db.collection("users")
@@ -142,7 +146,7 @@ public class TryToGetParentsActivity extends AppCompatActivity {
                                                                                                                                                                             });
                                                                                                                                                                 }
 
-                                                                                                                                                                db.collection("users")
+                                                                                                                                                                /*db.collection("users")
                                                                                                                                                                         .whereEqualTo("userID", uid)
                                                                                                                                                                         .get()
                                                                                                                                                                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -150,7 +154,8 @@ public class TryToGetParentsActivity extends AppCompatActivity {
                                                                                                                                                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                                                                                                                                                 if (task.isSuccessful()) {
                                                                                                                                                                                     for (QueryDocumentSnapshot queryDocumentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                                                                                                                                                                        for (Node nodeToAdd : newTree.getGraph().vertexSet())
+                                                                                                                                                                                        Tree toSend = newTree.deleteDuplicats();
+                                                                                                                                                                                        for (Node nodeToAdd : toSend.getGraph().vertexSet())
                                                                                                                                                                                             queryDocumentSnapshot.getReference()
                                                                                                                                                                                                     .collection("treeSnap")
                                                                                                                                                                                                     .add(nodeToAdd)
@@ -166,7 +171,7 @@ public class TryToGetParentsActivity extends AppCompatActivity {
                                                                                                                                                                                     }
                                                                                                                                                                                 }
                                                                                                                                                                             }
-                                                                                                                                                                        });
+                                                                                                                                                                        });*/
                                                                                                                                                             }
                                                                                                                                                         }
                                                                                                                                                     });
@@ -177,12 +182,14 @@ public class TryToGetParentsActivity extends AppCompatActivity {
                                                                                                                 }
                                                                                                             }
                                                                                                         }
+
                                                                                                     });
                                                                                         }
                                                                                     }
                                                                                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                                                                     finish();
                                                                                 }
+
                                                                             }
                                                                         });
                                                             }

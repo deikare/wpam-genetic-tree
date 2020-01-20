@@ -5,12 +5,14 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.traverse.DepthFirstIterator;
 import org.jgrapht.traverse.TopologicalOrderIterator;
+import org.w3c.dom.NodeList;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,12 +29,23 @@ public class Tree implements Serializable {
     }
 
     public void AddPatron(Node child, Node patron) {
-        if (graph.vertexSet().isEmpty()) {
-            this.graph.addVertex(patron);
+        if (child != null) {
+            if (this.getNodeParentsAmount(child) < 2) {
+                if (graph.vertexSet().isEmpty()) {
+                    this.graph.addVertex(patron);
+                } else {
+                    this.graph.addVertex(patron);
+                    this.graph.addEdge(child, patron);
+                }
+            }
         }
         else {
-            this.graph.addVertex(patron);
-            this.graph.addEdge(child, patron);
+            if (graph.vertexSet().isEmpty()) {
+                this.graph.addVertex(patron);
+            } else {
+                this.graph.addVertex(patron);
+                this.graph.addEdge(child, patron);
+            }
         }
     }
 
@@ -168,9 +181,9 @@ public class Tree implements Serializable {
     }
 
     public int getNodeParentsAmount(Node node) {
-        int result = 0;
-        for (DefaultEdge edge : this.getGraph().outgoingEdgesOf(node))
-            ++result;
+        int result = this.getGraph().outgoingEdgesOf(node).size();
+        /*for (DefaultEdge edge : )
+            ++result;*/
         return result;
     }
 
@@ -181,6 +194,18 @@ public class Tree implements Serializable {
                 max = node.getNumber();
         }
         return max;
+    }
+
+    public Tree deleteDuplicats() {
+        ArrayList<Node> nodes = new ArrayList<>();
+        for (Node node :this.getGraph().vertexSet())
+            nodes.add(node);
+        LinkedHashSet<Node> hashSet = new LinkedHashSet<>(nodes);
+        ArrayList<Node> nodes2 = new ArrayList<>(hashSet);
+        Tree newTree = treeFromNodesArray(nodes2);
+        System.out.println("do wyslania:");
+        System.out.println(newTree.toJson());
+        return newTree;
     }
 
 }

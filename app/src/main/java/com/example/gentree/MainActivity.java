@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.method.MovementMethod;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -110,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                                                     System.out.println(newTree.toJson());
                                                     String text = "";
                                                     for (Node node : newTree.getGraph().vertexSet())
-                                                        text += "{name=" + node.getAttributes().get("name") + ", n=" + node.getNumber() + ", p=" + node.getNumberofParent() + "} ";
+                                                        text += "{name=" + node.getAttributes().get("name") + ", n=" + node.getNumber() + ", p=" + node.getNumberofParent() + "}\n";
 //                                                    textView.setText(newTree.toJson());
                                                     textView.setText(text);
                                                 }
