@@ -108,10 +108,11 @@ public class MainActivity extends AppCompatActivity {
                                                     }*/
                                                     Tree newTree = Tree.treeFromNodesArray(nodes);
                                                     System.out.println(newTree.toJson());
-                                                    textView.setText(newTree.toJson());
-                                                    /*System.out.println("dasz rade");
-                                                    System.out.println("wierze w ciebie kotku <3");
-                                                    System.out.println("o chuj o chuj o chuj!");*/
+                                                    String text = "";
+                                                    for (Node node : newTree.getGraph().vertexSet())
+                                                        text += "{name=" + node.getAttributes().get("name") + ", n=" + node.getNumber() + ", p=" + node.getNumberofParent() + "} ";
+//                                                    textView.setText(newTree.toJson());
+                                                    textView.setText(text);
                                                 }
                                             }
                                         });
