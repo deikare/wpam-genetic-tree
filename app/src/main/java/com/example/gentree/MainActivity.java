@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                                                     }*/
                                                     Tree newTree = Tree.treeFromNodesArray(nodes);
                                                     System.out.println(newTree.toJson());
+                                                    textView.setText(newTree.toJson());
                                                     /*System.out.println("dasz rade");
                                                     System.out.println("wierze w ciebie kotku <3");
                                                     System.out.println("o chuj o chuj o chuj!");*/
@@ -168,6 +169,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void editRecord(View view) {
         startActivity(new Intent(getApplicationContext(), EditNodeActivity.class));
+        finish();
+    }
+
+    public void searchForParents(View view) {
+        startActivity(new Intent(getApplicationContext(), TryToGetParentsActivity.class));
         finish();
     }
 }

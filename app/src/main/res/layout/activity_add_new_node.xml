@@ -21,21 +21,6 @@
         app:layout_constraintVertical_bias="0.104" />
 
     <EditText
-        android:id="@+id/add_node_node_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
-        android:ems="10"
-        android:hint="@string/node_number"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/add_node_description"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/add_node_description"
-        app:layout_constraintTop_toBottomOf="@+id/add_node_parentNo"
-        app:layout_constraintVertical_bias="0.153" />
-
-    <EditText
         android:id="@+id/add_node_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -102,7 +87,8 @@
         app:layout_constraintEnd_toEndOf="@+id/add_node_date_of_death"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="@+id/add_node_date_of_death"
-        app:layout_constraintTop_toBottomOf="@+id/add_node_node_number" />
+        app:layout_constraintTop_toBottomOf="@+id/add_node_parentNo"
+        app:layout_constraintVertical_bias="0.216" />
 
     <EditText
         android:id="@+id/add_node_work"

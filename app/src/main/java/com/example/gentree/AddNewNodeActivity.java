@@ -28,7 +28,7 @@ import java.util.Objects;
 
 public class AddNewNodeActivity extends AppCompatActivity {
 
-    private EditText name, lastName, dateOfBirth, dateOfDeath, work, location, education, description, parentNumber, nodeNumber;
+    private EditText name, lastName, dateOfBirth, dateOfDeath, work, location, education, description, parentNumber;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
 
@@ -48,7 +48,6 @@ public class AddNewNodeActivity extends AppCompatActivity {
         education = findViewById(R.id.add_node_education);
         description = findViewById(R.id.add_node_description);
         parentNumber = findViewById(R.id.add_node_parentNo);
-        nodeNumber = findViewById(R.id.add_node_node_number);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -72,7 +71,6 @@ public class AddNewNodeActivity extends AppCompatActivity {
                 final String currentEducation = education.getText().toString();
                 final String currentLocation = location.getText().toString();
                 final String currentDescription = description.getText().toString();
-                final String currentNodeNo = nodeNumber.getText().toString();
                 final String currentParentNo = parentNumber.getText().toString();
 
                 final String userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
@@ -96,29 +94,62 @@ public class AddNewNodeActivity extends AppCompatActivity {
                                     attributes.put(NodeKeys.LOCATION, currentLocation);
                                     attributes.put(NodeKeys.DESCRIPTION, currentDescription);
 
-                                    int no1 = Integer.parseInt(currentNodeNo);
-                                    Node newNode = new Node(attributes, no1);
-                                    no1 = Integer.parseInt(currentParentNo);
-                                    newNode.setNumberofParent(no1);
-
                                     for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
                                         documentSnapshot.getReference()
                                                 .collection("treeSnap")
-                                                .add(newNode)
-                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                .get()
+                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                     @Override
-                                                    public void onSuccess(DocumentReference documentReference) {
-                                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                                        finish();
-                                                    }
-                                                })
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
+                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                        if (task.isSuccessful()) {
+                                                            ArrayList<Node> nodes = new ArrayList<>();
+                                                            for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
+                                                                nodes.add(documentSnapshot.toObject(Node.class));
+                                                            }
+                                                            Tree newTree = Tree.treeFromNodesArray(nodes);
+                                                            int no1 = newTree.getMaxNodeNumber() + 1;
+                                                            Node newNode = new Node(attributes, no1);
+                                                            no1 = Integer.parseInt(currentParentNo);
+                                                            newNode.setNumberofParent(no1);
 
+                                                            db.collection("users")
+                                                                    .whereEqualTo("userID", userID)
+                                                                    .get()
+                                                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                            if (task.isSuccessful()) {
+                                                                                for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
+                                                                                    documentSnapshot.getReference()
+                                                                                            .collection("treeSnap")
+                                                                                            .add(newNode)
+                                                                                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                                                                @Override
+                                                                                                public void onSuccess(DocumentReference documentReference) {
+                                                                                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                                                                                    finish();
+                                                                                                }
+                                                                                            })
+                                                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                                                @Override
+                                                                                                public void onFailure(@NonNull Exception e) {
+
+                                                                                                }
+                                                                                            });
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    });
+
+
+                                                        }
                                                     }
                                                 });
                                     }
+
+
+
+
                                 }
                             }
                         });

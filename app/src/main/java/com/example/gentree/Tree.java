@@ -167,4 +167,20 @@ public class Tree implements Serializable {
         return newTree;
     }
 
+    public int getNodeParentsAmount(Node node) {
+        int result = 0;
+        for (DefaultEdge edge : this.getGraph().outgoingEdgesOf(node))
+            ++result;
+        return result;
+    }
+
+    public int getMaxNodeNumber() {
+        int max = -1;
+        for (Node node : this.getGraph().vertexSet()) {
+            if (node.getNumber() > max)
+                max = node.getNumber();
+        }
+        return max;
+    }
+
 }
