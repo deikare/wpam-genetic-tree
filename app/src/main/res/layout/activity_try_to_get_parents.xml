@@ -29,5 +29,6 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="@+id/new_parents_node_number"
         app:layout_constraintTop_toBottomOf="@+id/new_parents_node_number"
-        app:layout_constraintVertical_bias="0.153" />
+        app:layout_constraintVertical_bias="0.153"
+        android:onClick="searchAndUpdateParents"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

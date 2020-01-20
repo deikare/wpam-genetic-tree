@@ -55,7 +55,7 @@ public class FirstNodeActivity extends AppCompatActivity {
 
         Button button = findViewById(R.id.first_add_node_button);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        /*button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String currentName = name.getText().toString();
@@ -117,6 +117,38 @@ public class FirstNodeActivity extends AppCompatActivity {
                             }
                         });
             }
-        });
+        });*/
+    }
+
+    public void insertFirstNode(View view) {
+
+        final String currentName = name.getText().toString();
+        final String currentLastName = lastName.getText().toString();
+        final String dob = dateOfBirth.getText().toString();
+        final String dod = dateOfDeath.getText().toString();
+        final String currentWork = work.getText().toString();
+        final String currentEducation = education.getText().toString();
+        final String currentLocation = location.getText().toString();
+        final String currentDescription = description.getText().toString();
+
+        Map<String, String> attributes = new HashMap<>();
+        attributes.put(NodeKeys.NAME, currentName);
+        attributes.put(NodeKeys.LAST_NAME, currentLastName);
+        attributes.put(NodeKeys.DATE_OF_BIRTH, dob);
+        attributes.put(NodeKeys.DATE_OF_DEATH, dod);
+        attributes.put(NodeKeys.EDUCATION, currentEducation);
+        attributes.put(NodeKeys.WORK, currentWork);
+        attributes.put(NodeKeys.LOCATION, currentLocation);
+        attributes.put(NodeKeys.DESCRIPTION, currentDescription);
+
+        Node firstNode = new Node(attributes, 0);
+        firstNode.setNumberofParent(-1);
+        FirebaseDecorator.pushNode(mAuth, db, firstNode);
+
+        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
+        Tree treeToAdd = Tree.treeFromNodesArray(nodesToAdd);
+
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        finish();
     }
 }

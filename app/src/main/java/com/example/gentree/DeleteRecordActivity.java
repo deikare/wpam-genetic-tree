@@ -24,7 +24,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class DeleteRecordActivity extends AppCompatActivity {
@@ -50,7 +52,7 @@ public class DeleteRecordActivity extends AppCompatActivity {
                 .build();
         db.setFirestoreSettings(settings);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        /*button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String currentNameDelete = nameToDelete.getText().toString();
@@ -104,14 +106,14 @@ public class DeleteRecordActivity extends AppCompatActivity {
                                                                                                             System.out.println(thisNode.toJson(thisNode.getNumberofParent()));
                                                                                                             queryDocumentSnapshot.getReference()
                                                                                                                     .delete()
-                                                                                                                    /*.addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                                                    *//*.addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                                                                         @Override
                                                                                                                         public void onComplete(@NonNull Task<Void> task) {
                                                                                                                             Toast.makeText(getApplicationContext(), "Node deleted", Toast.LENGTH_SHORT).show();
                                                                                                                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                                                                                                             finish();
                                                                                                                         }
-                                                                                                                    });*/
+                                                                                                                    });*//*
                                                                                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                                                         @Override
                                                                                                                         public void onSuccess(Void aVoid) {
@@ -160,7 +162,7 @@ public class DeleteRecordActivity extends AppCompatActivity {
 
                                                     }
                                                 })
-                                                /*.addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                *//*.addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
 
@@ -171,15 +173,36 @@ public class DeleteRecordActivity extends AppCompatActivity {
                                                     public void onFailure(@NonNull Exception e) {
 
                                                     }
-                                                })*/;
+                                                })*//*;
                                     }
                                 }
                             }
                         });
 
             }
-        });
+        });*/
 
+    }
+
+    public void deleteNode(View view) {
+        final String numberToDelete = nameToDelete.getText().toString();
+
+        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
+        Tree treeToAdd = Tree.treeFromNodesArray(nodesToAdd);
+        int no = Integer.parseInt(numberToDelete);
+
+        Node nodeToDelete = Tree.findNodeByNumber(nodesToAdd, no);
+
+        ArrayList<Node> nodesToDelete = treeToAdd.getDeletedNodes(nodeToDelete);
+        FirebaseDecorator.deleteCertainNodes(mAuth, db, nodesToDelete);
+        /*treeToAdd.RemovePatron(nodeToDelete);
+        FirebaseDecorator.deleteNodes(mAuth, db);
+        ArrayList<Node> nodesToPush = treeToAdd.toNodeArrayList();
+        FirebaseDecorator.pushNodes(mAuth, db, nodesToPush);*/
+
+
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        finish();
     }
 }
 

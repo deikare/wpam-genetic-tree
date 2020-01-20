@@ -208,4 +208,27 @@ public class Tree implements Serializable {
         return newTree;
     }
 
+    public ArrayList<Node> toNodeArrayList() {
+        ArrayList<Node> nodes = new ArrayList<>(this.getGraph().vertexSet());
+        return nodes;
+    }
+
+    public ArrayList<Node> getDeletedNodes(Node baseToDelete) {
+        Tree copyTree = new Tree(this.getGraph());
+        Iterator<Node> iterator = new DepthFirstIterator<>(copyTree.getGraph(), baseToDelete);
+        ArrayList<Node> result = new ArrayList<>();
+        /*DefaultEdge begEdge = null;
+        for (var edge : graph.incomingEdgesOf(toRemove)) {
+            begEdge = edge;
+        }
+        Node beforeNode = graph.getEdgeSource(begEdge);*/
+        while (iterator.hasNext()) {
+//            result.add(
+            Node temp = iterator.next();
+            result.add(temp);
+            graph.removeVertex(temp);
+        }
+        return result;
+    }
+
 }

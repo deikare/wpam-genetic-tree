@@ -29,5 +29,6 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="@+id/name_to_delete"
         app:layout_constraintTop_toBottomOf="@+id/name_to_delete"
-        app:layout_constraintVertical_bias="0.329" />
+        app:layout_constraintVertical_bias="0.329"
+        android:onClick="deleteNode"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

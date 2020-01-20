@@ -60,7 +60,7 @@ public class AddNewNodeActivity extends AppCompatActivity {
 
         Button button = findViewById(R.id.add_node_button);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        /*button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String currentName = name.getText().toString();
@@ -154,7 +154,56 @@ public class AddNewNodeActivity extends AppCompatActivity {
                             }
                         });
             }
-        });
+        });*/
+    }
+
+    public void addNode(View view) {
+        final String currentName = name.getText().toString();
+        final String currentLastName = lastName.getText().toString();
+        final String dob = dateOfBirth.getText().toString();
+        final String dod = dateOfDeath.getText().toString();
+        final String currentWork = work.getText().toString();
+        final String currentEducation = education.getText().toString();
+        final String currentLocation = location.getText().toString();
+        final String currentDescription = description.getText().toString();
+        final String currentParentNo = parentNumber.getText().toString();
+
+        Map<String, String> attributes = new HashMap<>();
+        attributes.put(NodeKeys.NAME, currentName);
+        attributes.put(NodeKeys.LAST_NAME, currentLastName);
+        attributes.put(NodeKeys.DATE_OF_BIRTH, dob);
+        attributes.put(NodeKeys.DATE_OF_DEATH, dod);
+        attributes.put(NodeKeys.EDUCATION, currentEducation);
+        attributes.put(NodeKeys.WORK, currentWork);
+        attributes.put(NodeKeys.LOCATION, currentLocation);
+        attributes.put(NodeKeys.DESCRIPTION, currentDescription);
+
+        int no1 = Integer.parseInt(currentParentNo);
+
+
+        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
+        Tree treeToAdd = Tree.treeFromNodesArray(nodesToAdd);
+        Node child = Tree.findNodeByNumber(nodesToAdd, no1);
+        if (child != null) {
+            if (treeToAdd.getNodeParentsAmount(child) < 2) {
+                int no2 = treeToAdd.getMaxNodeNumber() + 1;
+                Node newNode = new Node(attributes, no2);
+                newNode.setNumberofParent(no1);
+
+                FirebaseDecorator.pushNode(mAuth, db, newNode);
+
+            }
+        }
+        else if (no1 == -1) {
+            int no2 = treeToAdd.getMaxNodeNumber() + 1;
+            Node newNode = new Node(attributes, no2);
+            newNode.setNumberofParent(no1);
+
+            FirebaseDecorator.pushNode(mAuth, db, newNode);
+        }
+
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        finish();
     }
 
 /*

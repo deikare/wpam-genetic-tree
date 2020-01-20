@@ -59,112 +59,24 @@ public class MainActivity extends AppCompatActivity {
     public void readRecord(View view) {
         final TextView textView = findViewById(R.id.textView2);
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        /*ArrayList<Node> nodeList = FirebaseDecorator.pullNodesArray(mAuth, db);
-        System.out.println("po wyjsciu z funkcji");
-        System.out.println(nodeList.size());
-        System.out.println(nodeList.toString());*/
-//        Tree newTree = new Tree();
+
         ArrayList<Node> nodes = new ArrayList<>();
 
         final String userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-        db.collection("users")
-                .whereEqualTo("userID", userID)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                documentSnapshot.getReference()
-                                        .collection("treeSnap")
-                                        .get()
-                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    for (QueryDocumentSnapshot queryDocumentSnapshots : Objects.requireNonNull(task.getResult())) {
-//                                                        textView.setText(queryDocumentSnapshots.getData().toString());
-//                                                        System.out.println(queryDocumentSnapshots.toObject(Object.class));
-//                                                        System.out.println(queryDocumentSnapshots.getData().toString());
-                                                        nodes.add(queryDocumentSnapshots.toObject(Node.class));
-//                                                        System.out.println(nodes);
-//                                                        System.out.println("new");
-                                                    }
-                                                    /*nodes.sort(new Comparator<Node>() {
-                                                        @Override
-                                                        public int compare(Node node, Node t1) {
-                                                            int result = node.getNumberofParent() - t1.getNumberofParent();
-                                                            return Integer.compare(result, 0);
-                                                        }
-                                                    });
-//                                                    System.out.println(nodes);
-                                                    for (Node node : nodes) {
-                                                        System.out.println(node.toJson(node.getNumberofParent()));
-                                                        System.out.println(node.getNumberofParent());
-                                                    }
+        String result = "";
+        nodes = FirebaseDecorator.pullNodesArray(mAuth, db);
+        for (Node node : nodes) {
+            System.out.println(node.toJson(node.getNumberofParent()));
+            result += "{ name = " + node.getAttributes().get("name") + ", n = " + node.getNumber() + ", p = " + node.getNumberofParent() + " }\n";
+        }
+        textView.setText(result);
 
-                                                    for (Node node : nodes) {
-                                                        Node child = null;
-                                                        if (node.getNumber() != 0)
-                                                            child = Tree.findNodeByNumber(nodes, node.getNumberofParent());
-                                                        newTree.AddPatron(child, node);
-
-                                                    }*/
-                                                    Tree newTree = Tree.treeFromNodesArray(nodes);
-                                                    System.out.println(newTree.toJson());
-                                                    String text = "";
-                                                    for (Node node : newTree.getGraph().vertexSet())
-                                                        text += "{name=" + node.getAttributes().get("name") + ", n=" + node.getNumber() + ", p=" + node.getNumberofParent() + "}\n";
-//                                                    textView.setText(newTree.toJson());
-                                                    textView.setText(text);
-                                                }
-                                            }
-                                        });
-
-                            }
+       /* System.out.println("usuwam");
+        FirebaseDecorator.deleteNodes(mAuth, db);
+        System.out.println("dodaje na powrot");
+        FirebaseDecorator.pushNodes(mAuth, db, nodes);*/
 
 
-                        }
-
-                    }
-                });
-
-        /*String uID = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-        db.collection("users")
-                .whereEqualTo("userID", uID)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful())
-                            for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                documentSnapshot.getReference()
-                                        .collection("treeSnap")
-                                        .get()
-                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    for (QueryDocumentSnapshot queryDocumentSnapshots : Objects.requireNonNull(task.getResult())) {
-//                                                        textView.setText(queryDocumentSnapshots.getData().toString());
-//                                                        System.out.println(queryDocumentSnapshots.toObject(Object.class));
-//                                                        System.out.println(queryDocumentSnapshots.getData().toString());
-                                                        Node newNode = queryDocumentSnapshots.toObject(Node.class);
-                                                        System.out.println(newNode.toJson(newNode.getNumberofParent()));
-                                                        System.out.println("chuj");
-                                                    }
-                                                }
-                                            }
-                                        });
-
-                            }
-
-
-                        else {
-                            Toast.makeText(getApplicationContext(), "Nie udalo sie", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });*/
     }
 
     public void deleteRecord(View view) {

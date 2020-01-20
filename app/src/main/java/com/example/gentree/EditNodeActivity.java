@@ -42,7 +42,7 @@ public class EditNodeActivity extends AppCompatActivity {
         button = findViewById(R.id.edit_node_button);
         number = findViewById(R.id.edit_node_number);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        /*button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String currentStringNo = number.getText().toString();
@@ -112,14 +112,14 @@ public class EditNodeActivity extends AppCompatActivity {
                                                                                                             System.out.println(thisNode.toJson(thisNode.getNumberofParent()));
                                                                                                             queryDocumentSnapshot.getReference()
                                                                                                                     .delete()
-                                                                                                                    /*.addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                                                    *//*.addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                                                                         @Override
                                                                                                                         public void onComplete(@NonNull Task<Void> task) {
                                                                                                                             Toast.makeText(getApplicationContext(), "Node deleted", Toast.LENGTH_SHORT).show();
                                                                                                                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                                                                                                             finish();
                                                                                                                         }
-                                                                                                                    });*/
+                                                                                                                    });*//*
                                                                                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                                                         @Override
                                                                                                                         public void onSuccess(Void aVoid) {
@@ -172,6 +172,47 @@ public class EditNodeActivity extends AppCompatActivity {
                             }
                         });
             }
-        });
+        });*/
+    }
+
+    public void editNode(View view) {
+        final String numberToEdit = number.getText().toString();
+
+        Map<String, String> attributes = new HashMap<>();
+        attributes.put(NodeKeys.NAME, "edited");
+        attributes.put(NodeKeys.LAST_NAME, "");
+        attributes.put(NodeKeys.DATE_OF_BIRTH, "");
+        attributes.put(NodeKeys.DATE_OF_DEATH, "");
+        attributes.put(NodeKeys.EDUCATION, "");
+        attributes.put(NodeKeys.WORK, "");
+        attributes.put(NodeKeys.LOCATION, "");
+        attributes.put(NodeKeys.DESCRIPTION, "");
+
+        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
+        Tree treeToAdd = Tree.treeFromNodesArray(nodesToAdd);
+
+        int no = Integer.parseInt(numberToEdit);
+
+        Node beforeNode = Tree.findNodeByNumber(nodesToAdd, no);
+        if (beforeNode != null) {
+            Node newNode = new Node(attributes, beforeNode.getNumber());
+            newNode.setNumberofParent(beforeNode.getNumberofParent());
+
+            FirebaseDecorator.editGivenNode(mAuth, db, newNode);
+        }
+
+
+        /*treeToAdd.EditPatron(beforeNode, newNode);
+        FirebaseDecorator.deleteNodes(mAuth, db);
+        ArrayList<Node> nodesToPush = treeToAdd.toNodeArrayList();
+        FirebaseDecorator.pushNodes(mAuth, db, nodesToPush);*/
+
+        /*ArrayList<Node> nodesToSend = new ArrayList<>();
+        nodesToSend.add(newNode);
+
+        FirebaseDecorator.pushNodes(mAuth, db, nodesToSend);*/
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        finish();
+
     }
 }

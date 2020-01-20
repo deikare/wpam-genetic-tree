@@ -79,7 +79,8 @@
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="@+id/first_add_node_date_of_death"
             app:layout_constraintTop_toBottomOf="@+id/first_add_node_description"
-            app:layout_constraintVertical_bias="0.385" />
+            app:layout_constraintVertical_bias="0.385"
+            android:onClick="insertFirstNode"/>
 
         <EditText
             android:id="@+id/first_add_node_work"
