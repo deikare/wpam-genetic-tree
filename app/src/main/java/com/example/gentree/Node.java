@@ -3,12 +3,13 @@ package com.example.gentree;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 
-public class Node {
+public class Node implements Serializable {
     private Map<String, String> attributes; // mapa przechowujaca atrybuty usera
     private int number;
     private int numberofParent;

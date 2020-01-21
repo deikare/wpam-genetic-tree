@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.traverse.DepthFirstIterator;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Objects;
 
 import de.blox.graphview.BaseGraphAdapter;
 import de.blox.graphview.Graph;
@@ -22,7 +24,6 @@ import de.blox.graphview.tree.BuchheimWalkerAlgorithm;
 import de.blox.graphview.tree.BuchheimWalkerConfiguration;
 
 public class PrintNodesActivity extends AppCompatActivity {
-    private int nodeCount = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,23 +33,37 @@ public class PrintNodesActivity extends AppCompatActivity {
 
         // example tree
         final Graph graph = new Graph();
-        /*final de.blox.graphview.Node node1 = new de.blox.graphview.Node(getNodeText());
-        final de.blox.graphview.Node node2 = new de.blox.graphview.Node(getNodeText());
-        final de.blox.graphview.Node node3 = new de.blox.graphview.Node(getNodeText());*/
 
-        String treeJSON = getIntent().getStringExtra("tree");
-        Tree printTree = Tree.TreeFromJson(treeJSON);
+
+        ArrayList<Node> nodesArrayList = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
+        Tree printTree = Tree.treeFromNodesArray(Objects.requireNonNull(nodesArrayList));
+        for (Node node : printTree.toNodeArrayList())
+            System.out.println(node.toJson(node.getNumberofParent()));
+
         Node base = Tree.findNodeByNumber(printTree.toNodeArrayList(), 0);
 
 
         Iterator<Node> iterator = new DepthFirstIterator<>(printTree.getGraph(), base);
 
-        while (iterator.hasNext()) {
-            Node node = iterator.next();
-            for (DefaultEdge edge : printTree.getGraph().outgoingEdgesOf(node)) {
-                final de.blox.graphview.Node src = new de.blox.graphview.Node(getNodeText(printTree.getGraph().getEdgeSource(edge)));
-                final de.blox.graphview.Node dst = new de.blox.graphview.Node(getNodeText(printTree.getGraph().getEdgeTarget(edge)));
-                graph.addEdge(src, dst);
+        if (printTree.getGraph().vertexSet().size() == 1) {
+            final de.blox.graphview.Node src = new de.blox.graphview.Node(getNodeText(Objects.requireNonNull(base)));
+            graph.addNode(src);
+        }
+        else {
+            while (iterator.hasNext()) {
+                System.out.println("wchodze");
+                Node node = iterator.next();
+                System.out.println(node.toJson(node.getNumberofParent()));
+
+                for (DefaultEdge edge : printTree.getGraph().outgoingEdgesOf(node)) {
+                    Node modelSrc = printTree.getGraph().getEdgeSource(edge);
+                    Node modelDst = printTree.getGraph().getEdgeTarget(edge);
+
+                    final de.blox.graphview.Node src = new de.blox.graphview.Node(getNodeText(modelSrc));
+                    final de.blox.graphview.Node dst = new de.blox.graphview.Node(getNodeText(modelDst));
+
+                    graph.addEdge(src, dst);
+                }
             }
         }
 
@@ -86,9 +101,30 @@ public class PrintNodesActivity extends AppCompatActivity {
                 .setOrientation(BuchheimWalkerConfiguration.ORIENTATION_BOTTOM_TOP)
                 .build();
         adapter.setAlgorithm(new BuchheimWalkerAlgorithm(configuration));
+        System.out.println(printTree.toJson());
+
+
+        for (Node val : printTree.getGraph().vertexSet())
+            System.out.println(val.getAttributes().toString());
+
+//        System.out.println(printTreev2.toJson());
+
     }
 
     private String getNodeText(Node node) {
-        return "" + node.getNumber();
+//        String result = node.getAttributes().get(NodeKeys.NAME);
+//        System.out.println(result);
+//        return "" + node.getAttributes().get(NodeKeys.NAME);
+        int dob = Integer.parseInt(Objects.requireNonNull(node.getAttributes().get(NodeKeys.DATE_OF_BIRTH)));
+        int dod;
+        String result = "" + node.getAttributes().get(NodeKeys.NAME) + " " + node.getAttributes().get(NodeKeys.LAST_NAME) + "\n"
+                + dob + " - ";
+        if (node.getAttributes().containsKey(NodeKeys.DATE_OF_DEATH)) {
+            dod = Integer.parseInt(Objects.requireNonNull(node.getAttributes().get(NodeKeys.DATE_OF_DEATH)));
+            result += dod;
+        }
+        else result += "?";
+
+        return result;
     }
 }

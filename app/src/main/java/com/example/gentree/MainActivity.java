@@ -87,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
         String treeJSON = toSend.toJson();
         Intent i = new Intent(getApplicationContext(), PrintNodesActivity.class);
         i.putExtra("tree", treeJSON);
+//        ArrayList<Node> nodes = toSend.toNodeArrayList();
+//        i.putExtra("tree", nodes);
+        i.putExtra("treeNodes", nodes);
         startActivity(i);
         finish();
         /*startActivity(new Intent(getApplicationContext(), DeleteRecordActivity.class));
