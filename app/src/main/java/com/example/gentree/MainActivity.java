@@ -80,8 +80,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void deleteRecord(View view) {
-        startActivity(new Intent(getApplicationContext(), DeleteRecordActivity.class));
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        ArrayList<Node> nodes = FirebaseDecorator.pullNodesArray(mAuth, db);
+
+        Tree toSend = Tree.treeFromNodesArray(nodes);
+        String treeJSON = toSend.toJson();
+        Intent i = new Intent(getApplicationContext(), PrintNodesActivity.class);
+        i.putExtra("tree", treeJSON);
+        startActivity(i);
         finish();
+        /*startActivity(new Intent(getApplicationContext(), DeleteRecordActivity.class));
+        finish();*/
     }
 
     public void editRecord(View view) {
