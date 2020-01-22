@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".OptionsActivity">>
+
+    <Button
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/buttonGoBack"
+        android:onClick="goToMenu"></Button>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".OptionsActivity">
+
+    <Button
+        android:id="@+id/btn_options_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Logout"
+        android:onClick="logout"
+
+        ></Button>
+    <Button
+        android:id="@+id/btn_options_read"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Tree details"
+        android:onClick="readTree"
+
+        ></Button>
+    <Button
+        android:id="@+id/btn_options_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Add new family member"
+        android:onClick="addMember"
+
+        ></Button>
+    <Button
+        android:id="@+id/btn_options_del"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Delete family member"
+        android:onClick="deleteMember"
+
+        ></Button>
+    <Button
+        android:id="@+id/btn_options_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Edit family member"
+        android:onClick="editMember"
+
+        ></Button>
+    <Button
+        android:id="@+id/btn_options_look_for_parents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Search for matching parents"
+        android:onClick="goForParentLooking"
+
+        ></Button>
+</LinearLayout>
+
+</RelativeLayout>

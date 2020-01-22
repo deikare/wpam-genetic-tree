@@ -3,6 +3,11 @@ package com.example.gentree;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,7 +36,6 @@ public class PrintNodesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_print_nodes);
         GraphView graphView = findViewById(R.id.graph);
 
-        // example tree
         final Graph graph = new Graph();
 
 
@@ -51,9 +55,7 @@ public class PrintNodesActivity extends AppCompatActivity {
         }
         else {
             while (iterator.hasNext()) {
-                System.out.println("wchodze");
                 Node node = iterator.next();
-                System.out.println(node.toJson(node.getNumberofParent()));
 
                 for (DefaultEdge edge : printTree.getGraph().outgoingEdgesOf(node)) {
                     Node modelSrc = printTree.getGraph().getEdgeSource(edge);
@@ -68,7 +70,6 @@ public class PrintNodesActivity extends AppCompatActivity {
         }
 
 
-        // you can set the graph via the constructor or use the adapter.setGraph(Graph) method
         final BaseGraphAdapter<ViewHolder> adapter = new BaseGraphAdapter<ViewHolder>(graph) {
 
             @Nullable
@@ -102,12 +103,6 @@ public class PrintNodesActivity extends AppCompatActivity {
                 .build();
         adapter.setAlgorithm(new BuchheimWalkerAlgorithm(configuration));
         System.out.println(printTree.toJson());
-
-
-        for (Node val : printTree.getGraph().vertexSet())
-            System.out.println(val.getAttributes().toString());
-
-//        System.out.println(printTreev2.toJson());
 
     }
 
