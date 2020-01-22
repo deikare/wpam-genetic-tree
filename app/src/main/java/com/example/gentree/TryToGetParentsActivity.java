@@ -119,7 +119,6 @@ public class TryToGetParentsActivity extends AppCompatActivity {
                     else break;
                 }
                 if (isTreeEdited) {
-//                    FirebaseDecorator.deleteNodes(mAuth, db);
                     FirebaseDecorator.pushNodes(mAuth, db, nodesToSend);
                     Toast.makeText(getApplicationContext(), "Node(s) added", Toast.LENGTH_SHORT).show();
                 }
@@ -129,34 +128,7 @@ public class TryToGetParentsActivity extends AppCompatActivity {
             }
         }
 
-        /*Map<String, String> attributes = new HashMap<>();
-        attributes.put(NodeKeys.NAME, "edited");
-        attributes.put(NodeKeys.LAST_NAME, "");
-        attributes.put(NodeKeys.DATE_OF_BIRTH, "");
-        attributes.put(NodeKeys.DATE_OF_DEATH, "");
-        attributes.put(NodeKeys.EDUCATION, "");
-        attributes.put(NodeKeys.WORK, "");
-        attributes.put(NodeKeys.LOCATION, "");
-        attributes.put(NodeKeys.DESCRIPTION, "");
 
-        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
-        Tree treeToAdd = Tree.treeFromNodesArray(nodesToAdd);
-
-        int no = Integer.parseInt(numberToEdit);
-
-        Node beforeNode = Tree.findNodeByNumber(nodesToAdd, no);
-        Node newNode = new Node(attributes, beforeNode.getNumber());
-        newNode.setNumberofParent(beforeNode.getNumberofParent());
-
-        treeToAdd.EditPatron(beforeNode, newNode);
-        FirebaseDecorator.deleteNodes(mAuth, db);
-        ArrayList<Node> nodesToPush = treeToAdd.toNodeArrayList();
-        FirebaseDecorator.pushNodes(mAuth, db, nodesToPush);
-
-        *//*ArrayList<Node> nodesToSend = new ArrayList<>();
-        nodesToSend.add(newNode);
-
-        FirebaseDecorator.pushNodes(mAuth, db, nodesToSend);*/
         ArrayList<Node> nodesToPassFurther = thisTree.toNodeArrayList();
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         i.putExtra("treeNodes", nodesToPassFurther);

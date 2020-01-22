@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         final Graph graph = new Graph();
 
 
-        //////////////TU WAZNE - linijka ponizej dziala!///////////////////
+        //////////////TU WAZNE - linijka ponizej dziala - przekazywanie danych albo z firebase'a, albo z poprzednich View!///////////////////
         nodesArrayList = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
         if (nodesArrayList == null)
             nodesArrayList = FirebaseDecorator.pullNodesArray(mAuth, db);
@@ -136,9 +136,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String getNodeText(Node node) {
-//        String result = node.getAttributes().get(NodeKeys.NAME);
-//        System.out.println(result);
-//        return "" + node.getAttributes().get(NodeKeys.NAME);
         int dob = Integer.parseInt(Objects.requireNonNull(node.getAttributes().get(NodeKeys.DATE_OF_BIRTH)));
         int dod;
         String result = "" + "id: " + node.getNumber() + "\n"
@@ -166,56 +163,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void addNewRecord(View view) {
         startActivity(new Intent(getApplicationContext(), AddNewNodeActivity.class));
-        finish();
-    }
-
-    /*public void readRecord(View view) {
-        final TextView textView = findViewById(R.id.textView2);
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
-        ArrayList<Node> nodes = new ArrayList<>();
-
-        final String userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-        String result = "";
-        nodes = FirebaseDecorator.pullNodesArray(mAuth, db);
-        for (Node node : nodes) {
-            System.out.println(node.toJson(node.getNumberofParent()));
-            result += "{ name = " + node.getAttributes().get("name") + ", n = " + node.getNumber() + ", p = " + node.getNumberofParent() + " }\n";
-        }
-        textView.setText(result);
-
-       *//* System.out.println("usuwam");
-        FirebaseDecorator.deleteNodes(mAuth, db);
-        System.out.println("dodaje na powrot");
-        FirebaseDecorator.pushNodes(mAuth, db, nodes);*//*
-
-
-    }*/
-
-    public void deleteRecord(View view) {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        ArrayList<Node> nodes = FirebaseDecorator.pullNodesArray(mAuth, db);
-
-        Tree toSend = Tree.treeFromNodesArray(nodes);
-        String treeJSON = toSend.toJson();
-        Intent i = new Intent(getApplicationContext(), PrintNodesActivity.class);
-        i.putExtra("tree", treeJSON);
-//        ArrayList<Node> nodes = toSend.toNodeArrayList();
-//        i.putExtra("tree", nodes);
-        i.putExtra("treeNodes", nodes);
-        startActivity(i);
-        finish();
-        /*startActivity(new Intent(getApplicationContext(), DeleteRecordActivity.class));
-        finish();*/
-    }
-
-    public void editRecord(View view) {
-        startActivity(new Intent(getApplicationContext(), EditNodeActivity.class));
-        finish();
-    }
-
-    public void searchForParents(View view) {
-        startActivity(new Intent(getApplicationContext(), TryToGetParentsActivity.class));
         finish();
     }
 

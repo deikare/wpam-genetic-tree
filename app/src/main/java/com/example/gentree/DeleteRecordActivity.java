@@ -206,17 +206,12 @@ public class DeleteRecordActivity extends AppCompatActivity {
             return;
         }
 
-
-//        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
-
         Node nodeToDelete = Tree.findNodeByNumber(nodesToAdd, no);
 
         ArrayList<Node> nodesToDelete = treeToAdd.getDeletedNodes(nodeToDelete);
         FirebaseDecorator.deleteCertainNodes(mAuth, db, nodesToDelete);
         treeToAdd.RemovePatron(nodeToDelete);
-//        FirebaseDecorator.deleteNodes(mAuth, db);
         ArrayList<Node> nodesToPush = treeToAdd.toNodeArrayList();
-//        FirebaseDecorator.pushNodes(mAuth, db, nodesToPush);
 
         Toast.makeText(getApplicationContext(), "Node deleted", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(getApplicationContext(), MainActivity.class);

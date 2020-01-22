@@ -31,7 +31,7 @@ public class EditNodeActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Button button;
     private EditText number;
-    private EditText name, lastName, dateOfBirth, dateOfDeath, work, location, education, description, parentNumber;
+    private EditText name, lastName, dateOfBirth, dateOfDeath, location;
 
 
     @Override
@@ -58,10 +58,9 @@ public class EditNodeActivity extends AppCompatActivity {
         final String currentLastName = lastName.getText().toString();
         final String dob = dateOfBirth.getText().toString();
         final String dod = dateOfDeath.getText().toString();
-//        final String currentWork = work.getText().toString();
-//        final String currentEducation = education.getText().toString();
+
         final String currentLocation = location.getText().toString();
-//        final String currentDescription = description.getText().toString();
+
 
         Map<String, String> attributes = new HashMap<>();
 
@@ -91,15 +90,6 @@ public class EditNodeActivity extends AppCompatActivity {
 
 
         boolean isChanged = false;
-
-        /*attributes.put(NodeKeys.NAME, currentName);
-        attributes.put(NodeKeys.LAST_NAME, currentLastName);
-        attributes.put(NodeKeys.DATE_OF_BIRTH, dob);*/
-        /*attributes.put(NodeKeys.DATE_OF_DEATH, "");
-        attributes.put(NodeKeys.EDUCATION, "");
-        attributes.put(NodeKeys.WORK, "");
-        attributes.put(NodeKeys.LOCATION, "");
-        attributes.put(NodeKeys.DESCRIPTION, "");*/
 
 
         if (beforeNode != null) {
@@ -169,16 +159,6 @@ public class EditNodeActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Node edited", Toast.LENGTH_SHORT).show();
         }
 
-
-        /*treeToAdd.EditPatron(beforeNode, newNode);
-        FirebaseDecorator.deleteNodes(mAuth, db);
-        ArrayList<Node> nodesToPush = treeToAdd.toNodeArrayList();
-        FirebaseDecorator.pushNodes(mAuth, db, nodesToPush);*/
-
-        /*ArrayList<Node> nodesToSend = new ArrayList<>();
-        nodesToSend.add(newNode);
-
-        FirebaseDecorator.pushNodes(mAuth, db, nodesToSend);*/
         ArrayList<Node> nodesToPassFurther;
         if (isChanged) {
             nodesToPassFurther = treeToAdd.toNodeArrayList();
@@ -188,7 +168,7 @@ public class EditNodeActivity extends AppCompatActivity {
             if (nodesToPassFurther == null)
                 nodesToPassFurther = FirebaseDecorator.pullNodesArray(mAuth, db);
         }
-//        nodesToPassFurther = treeToAdd.toNodeArrayList();
+
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         i.putExtra("treeNodes", nodesToPassFurther);
         startActivity(i);

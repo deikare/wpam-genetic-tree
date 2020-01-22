@@ -29,7 +29,7 @@ import java.util.Objects;
 
 public class AddNewNodeActivity extends AppCompatActivity {
 
-    private EditText name, lastName, dateOfBirth, dateOfDeath, work, location, education, description, parentNumber;
+    private EditText name, lastName, dateOfBirth, dateOfDeath, location, parentNumber;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
 
@@ -44,10 +44,7 @@ public class AddNewNodeActivity extends AppCompatActivity {
         lastName = findViewById(R.id.add_node_last_name);
         dateOfBirth = findViewById(R.id.add_node_date_of_birth);
         dateOfDeath = findViewById(R.id.add_node_date_of_death);
-//        work = findViewById(R.id.add_node_work);
         location = findViewById(R.id.add_node_location);
-//        education = findViewById(R.id.add_node_education);
-//        description = findViewById(R.id.add_node_description);
         parentNumber = findViewById(R.id.add_node_parentNo);
 
 
@@ -60,102 +57,6 @@ public class AddNewNodeActivity extends AppCompatActivity {
         db.setFirestoreSettings(settings);
 
         Button button = findViewById(R.id.add_node_button);
-
-        /*button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String currentName = name.getText().toString();
-                final String currentLastName = lastName.getText().toString();
-                final String dob = dateOfBirth.getText().toString();
-                final String dod = dateOfDeath.getText().toString();
-                final String currentWork = work.getText().toString();
-                final String currentEducation = education.getText().toString();
-                final String currentLocation = location.getText().toString();
-                final String currentDescription = description.getText().toString();
-                final String currentParentNo = parentNumber.getText().toString();
-
-                final String userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                db.collection("users")
-                        .whereEqualTo("userID", userID)
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    ArrayList<String> userList = new ArrayList<>();
-                                    userList.add(userID);
-
-                                    Map<String, String> attributes = new HashMap<>();
-                                    attributes.put(NodeKeys.NAME, currentName);
-                                    attributes.put(NodeKeys.LAST_NAME, currentLastName);
-                                    attributes.put(NodeKeys.DATE_OF_BIRTH, dob);
-                                    attributes.put(NodeKeys.DATE_OF_DEATH, dod);
-                                    attributes.put(NodeKeys.EDUCATION, currentEducation);
-                                    attributes.put(NodeKeys.WORK, currentWork);
-                                    attributes.put(NodeKeys.LOCATION, currentLocation);
-                                    attributes.put(NodeKeys.DESCRIPTION, currentDescription);
-
-                                    for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                        documentSnapshot.getReference()
-                                                .collection("treeSnap")
-                                                .get()
-                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                        if (task.isSuccessful()) {
-                                                            ArrayList<Node> nodes = new ArrayList<>();
-                                                            for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                                                nodes.add(documentSnapshot.toObject(Node.class));
-                                                            }
-                                                            Tree newTree = Tree.treeFromNodesArray(nodes);
-                                                            int no1 = newTree.getMaxNodeNumber() + 1;
-                                                            Node newNode = new Node(attributes, no1);
-                                                            no1 = Integer.parseInt(currentParentNo);
-                                                            newNode.setNumberofParent(no1);
-
-                                                            db.collection("users")
-                                                                    .whereEqualTo("userID", userID)
-                                                                    .get()
-                                                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                        @Override
-                                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                            if (task.isSuccessful()) {
-                                                                                for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                                                                    documentSnapshot.getReference()
-                                                                                            .collection("treeSnap")
-                                                                                            .add(newNode)
-                                                                                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                                                                @Override
-                                                                                                public void onSuccess(DocumentReference documentReference) {
-                                                                                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                                                                                    finish();
-                                                                                                }
-                                                                                            })
-                                                                                            .addOnFailureListener(new OnFailureListener() {
-                                                                                                @Override
-                                                                                                public void onFailure(@NonNull Exception e) {
-
-                                                                                                }
-                                                                                            });
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    });
-
-
-                                                        }
-                                                    }
-                                                });
-                                    }
-
-
-
-
-                                }
-                            }
-                        });
-            }
-        });*/
     }
 
     public void addNode(View view) {
@@ -163,10 +64,7 @@ public class AddNewNodeActivity extends AppCompatActivity {
         final String currentLastName = lastName.getText().toString();
         final String dob = dateOfBirth.getText().toString();
         final String dod = dateOfDeath.getText().toString();
-//        final String currentWork = work.getText().toString();
-//        final String currentEducation = education.getText().toString();
         final String currentLocation = location.getText().toString();
-//        final String currentDescription = description.getText().toString();
         final String currentParentNo = parentNumber.getText().toString();
 
         Map<String, String> attributes = new HashMap<>();
@@ -221,7 +119,6 @@ public class AddNewNodeActivity extends AppCompatActivity {
         ArrayList<Node> nodesToAdd = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
         if (nodesToAdd == null)
             nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
-//        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
         Tree treeToAdd = Tree.treeFromNodesArray(nodesToAdd);
 
         if (TextUtils.isEmpty(currentParentNo)) {
@@ -239,22 +136,6 @@ public class AddNewNodeActivity extends AppCompatActivity {
             parentNumber.setError("Id is from 0 to " + treeToAdd.getMaxNodeNumber());
             return;
         }
-
-        /*if (!TextUtils.isEmpty(currentEducation)) {
-            attributes.put(NodeKeys.DATE_OF_DEATH, currentEducation);
-        }
-
-        if (!TextUtils.isEmpty(currentWork)) {
-            attributes.put(NodeKeys.DATE_OF_DEATH, currentWork);
-        }
-
-
-
-        if (!TextUtils.isEmpty(currentDescription)) {
-            attributes.put(NodeKeys.DATE_OF_DEATH, currentDescription);
-        }*/
-
-
 
 
         Node child = Tree.findNodeByNumber(nodesToAdd, no1);
