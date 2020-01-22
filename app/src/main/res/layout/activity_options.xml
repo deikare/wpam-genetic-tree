@@ -11,7 +11,7 @@
     <Button
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:background="@drawable/buttonGoBack"
+        android:background="@drawable/buttongoback"
         android:onClick="goToMenu"></Button>
 
 

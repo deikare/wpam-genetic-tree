@@ -52,10 +52,10 @@ public class RegisterActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         db = FirebaseFirestore.getInstance();
 
-        if (mAuth.getCurrentUser() != null) {
+        /*if (mAuth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
-        }
+        }*/
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override

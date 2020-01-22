@@ -21,6 +21,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.jgrapht.graph.DefaultEdge;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -357,25 +359,48 @@ public class TryToGetParentsActivity extends AppCompatActivity {
             for (Node node : nodes)
                 System.out.println("\t" + node.toJson(node.getNumberofParent()));
         }*/
-        ArrayList<Node> thisTreeNodes = FirebaseDecorator.pullNodesArray(mAuth, db);
+        ArrayList<Node> thisTreeNodes = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
+        if (thisTreeNodes == null)
+            thisTreeNodes = FirebaseDecorator.pullNodesArray(mAuth, db);
+//        ArrayList<Node> thisTreeNodes = FirebaseDecorator.pullNodesArray(mAuth, db);
         Node checkedNode = Tree.findNodeByNumber(thisTreeNodes, no);
         Tree thisTree = Tree.treeFromNodesArray(thisTreeNodes);
         if (checkedNode != null) {
             if (thisTree.getNodeParentsAmount(checkedNode) < 2) {
                 boolean isTreeEdited = false;
                 ArrayList<ArrayList<Node>> arrayListOfNodeList = FirebaseDecorator.getArrayListsFromAllTrees(mAuth, db);
+
                 ArrayList<Node> nodesToSend = new ArrayList<>();
+
+                ArrayList<Node> parentsOfCheckedNode = new ArrayList<>();
+                for (DefaultEdge edge : thisTree.getGraph().outgoingEdgesOf(checkedNode)) {
+                    Node parent = thisTree.getGraph().getEdgeTarget(edge);
+                    parentsOfCheckedNode.add(parent);
+                }
+
                 for (ArrayList<Node> nodes : arrayListOfNodeList) {
                     if (thisTree.getNodeParentsAmount(checkedNode) < 2) {
                         Tree subjectedTree = Tree.treeFromNodesArray(nodes);
                         ArrayList<Node> parentList = Tree.searchForParents(checkedNode, subjectedTree.getGraph());
                         if (parentList != null) {
                             for (Node parentToInsert : parentList) {
-                                parentToInsert.setNumber(thisTree.getMaxNodeNumber() + 1);
-                                parentToInsert.setNumberofParent(checkedNode.getNumber());
-                                thisTree.AddPatron(checkedNode, parentToInsert);
-                                nodesToSend.add(parentToInsert);
-                                isTreeEdited = true;
+                                boolean wouldBePair = true;
+
+                                for (Node currentParent : parentsOfCheckedNode) {
+                                    if (currentParent.getAttributes().equals(parentToInsert.getAttributes())) {
+                                        wouldBePair = true;
+                                        break;
+                                    }
+                                    else wouldBePair = false;
+                                }
+                                
+                                if (!wouldBePair) {
+                                    parentToInsert.setNumber(thisTree.getMaxNodeNumber() + 1);
+                                    parentToInsert.setNumberofParent(checkedNode.getNumber());
+                                    thisTree.AddPatron(checkedNode, parentToInsert);
+                                    nodesToSend.add(parentToInsert);
+                                    isTreeEdited = true;
+                                }
                             }
                         }
                     }
@@ -416,7 +441,10 @@ public class TryToGetParentsActivity extends AppCompatActivity {
         nodesToSend.add(newNode);
 
         FirebaseDecorator.pushNodes(mAuth, db, nodesToSend);*/
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        ArrayList<Node> nodesToPassFurther = thisTree.toNodeArrayList();
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        i.putExtra("treeNodes", nodesToPassFurther);
+        startActivity(i);
         finish();
     }
 }

@@ -74,9 +74,12 @@ public class Tree implements Serializable {
             begEdge = edge;
         }
         Node beforeNode = graph.getEdgeSource(begEdge);*/
-        while (iterator.hasNext()) {
-            graph.removeVertex(iterator.next());
+        if (iterator != null) {
+            while (iterator.hasNext()) {
+                graph.removeVertex(iterator.next());
+            }
         }
+
 
     }
 
@@ -226,7 +229,7 @@ public class Tree implements Serializable {
 //            result.add(
             Node temp = iterator.next();
             result.add(temp);
-            graph.removeVertex(temp);
+//            graph.removeVertex(temp);
         }
         return result;
     }

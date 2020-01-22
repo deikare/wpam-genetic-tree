@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -131,24 +132,64 @@ public class FirstNodeActivity extends AppCompatActivity {
         final String currentLocation = location.getText().toString();
         final String currentDescription = description.getText().toString();
 
+        if (TextUtils.isEmpty(currentName)) {
+            name.setError("Name is required");
+            return;
+        }
+        if (TextUtils.isEmpty(currentLastName)) {
+            lastName.setError("Password is required");
+            return;
+        }
+
+        if (TextUtils.isEmpty(dob)) {
+            dateOfBirth.setError("Date of birth is required");
+            return;
+        }
+
         Map<String, String> attributes = new HashMap<>();
         attributes.put(NodeKeys.NAME, currentName);
         attributes.put(NodeKeys.LAST_NAME, currentLastName);
         attributes.put(NodeKeys.DATE_OF_BIRTH, dob);
-        attributes.put(NodeKeys.DATE_OF_DEATH, dod);
+
+        if (!TextUtils.isEmpty(dod)) {
+            attributes.put(NodeKeys.DATE_OF_DEATH, dod);
+        }
+
+        if (!TextUtils.isEmpty(currentEducation)) {
+            attributes.put(NodeKeys.DATE_OF_DEATH, currentEducation);
+        }
+
+        if (!TextUtils.isEmpty(currentWork)) {
+            attributes.put(NodeKeys.DATE_OF_DEATH, currentWork);
+        }
+
+        if (!TextUtils.isEmpty(currentLocation)) {
+            attributes.put(NodeKeys.DATE_OF_DEATH, currentLocation);
+        }
+
+        if (!TextUtils.isEmpty(currentDescription)) {
+            attributes.put(NodeKeys.DATE_OF_DEATH, currentDescription);
+        }
+
+        /*attributes.put(NodeKeys.DATE_OF_DEATH, dod);
         attributes.put(NodeKeys.EDUCATION, currentEducation);
         attributes.put(NodeKeys.WORK, currentWork);
         attributes.put(NodeKeys.LOCATION, currentLocation);
-        attributes.put(NodeKeys.DESCRIPTION, currentDescription);
+        attributes.put(NodeKeys.DESCRIPTION, currentDescription);*/
 
         Node firstNode = new Node(attributes, 0);
         firstNode.setNumberofParent(-1);
         FirebaseDecorator.pushNode(mAuth, db, firstNode);
 
-        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
-        Tree treeToAdd = Tree.treeFromNodesArray(nodesToAdd);
+//        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
+//        Tree treeToAdd = Tree.treeFromNodesArray(nodesToAdd);
+        ArrayList<Node> nodesToAdd = new ArrayList<>();
+        nodesToAdd.add(firstNode);
 
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        i.putExtra("treeNodes", nodesToAdd);
+        startActivity(i);
         finish();
+
     }
 }

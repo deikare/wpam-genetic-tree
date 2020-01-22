@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -169,27 +170,60 @@ public class AddNewNodeActivity extends AppCompatActivity {
         final String currentParentNo = parentNumber.getText().toString();
 
         Map<String, String> attributes = new HashMap<>();
+        if (TextUtils.isEmpty(currentName)) {
+            name.setError("Name is required");
+            return;
+        }
+        if (TextUtils.isEmpty(currentLastName)) {
+            lastName.setError("Password is required");
+            return;
+        }
+
+        if (TextUtils.isEmpty(dob)) {
+            dateOfBirth.setError("Date of birth is required");
+            return;
+        }
+
         attributes.put(NodeKeys.NAME, currentName);
         attributes.put(NodeKeys.LAST_NAME, currentLastName);
         attributes.put(NodeKeys.DATE_OF_BIRTH, dob);
-        attributes.put(NodeKeys.DATE_OF_DEATH, dod);
-        attributes.put(NodeKeys.EDUCATION, currentEducation);
-        attributes.put(NodeKeys.WORK, currentWork);
-        attributes.put(NodeKeys.LOCATION, currentLocation);
-        attributes.put(NodeKeys.DESCRIPTION, currentDescription);
+
+        if (!TextUtils.isEmpty(dod)) {
+            attributes.put(NodeKeys.DATE_OF_DEATH, dod);
+        }
+
+        if (!TextUtils.isEmpty(currentEducation)) {
+            attributes.put(NodeKeys.DATE_OF_DEATH, currentEducation);
+        }
+
+        if (!TextUtils.isEmpty(currentWork)) {
+            attributes.put(NodeKeys.DATE_OF_DEATH, currentWork);
+        }
+
+        if (!TextUtils.isEmpty(currentLocation)) {
+            attributes.put(NodeKeys.DATE_OF_DEATH, currentLocation);
+        }
+
+        if (!TextUtils.isEmpty(currentDescription)) {
+            attributes.put(NodeKeys.DATE_OF_DEATH, currentDescription);
+        }
 
         int no1 = Integer.parseInt(currentParentNo);
 
-
-        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
+        ArrayList<Node> nodesToAdd = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
+        if (nodesToAdd == null)
+            nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
+//        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
         Tree treeToAdd = Tree.treeFromNodesArray(nodesToAdd);
         Node child = Tree.findNodeByNumber(nodesToAdd, no1);
+        ArrayList<Node> nodesPassedFurther = null;
         if (child != null) {
             if (treeToAdd.getNodeParentsAmount(child) < 2) {
                 int no2 = treeToAdd.getMaxNodeNumber() + 1;
                 Node newNode = new Node(attributes, no2);
                 newNode.setNumberofParent(no1);
-
+                treeToAdd.AddPatron(child, newNode);
+                nodesPassedFurther = treeToAdd.toNodeArrayList();
                 FirebaseDecorator.pushNode(mAuth, db, newNode);
 
             }
@@ -198,11 +232,18 @@ public class AddNewNodeActivity extends AppCompatActivity {
             int no2 = treeToAdd.getMaxNodeNumber() + 1;
             Node newNode = new Node(attributes, no2);
             newNode.setNumberofParent(no1);
-
+            treeToAdd.AddPatron(null, newNode);
+            nodesPassedFurther = treeToAdd.toNodeArrayList();
             FirebaseDecorator.pushNode(mAuth, db, newNode);
         }
 
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
+
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        if (nodesPassedFurther != null)
+            i.putExtra("treeNodes", nodesPassedFurther);
+        else i.putExtra("treeNodes", nodesToAdd);
+        startActivity(i);
         finish();
     }
 

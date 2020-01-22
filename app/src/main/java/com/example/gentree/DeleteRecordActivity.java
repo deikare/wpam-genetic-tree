@@ -187,7 +187,10 @@ public class DeleteRecordActivity extends AppCompatActivity {
     public void deleteNode(View view) {
         final String numberToDelete = nameToDelete.getText().toString();
 
-        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
+        ArrayList<Node> nodesToAdd = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
+        if (nodesToAdd == null)
+            nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
+//        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
         Tree treeToAdd = Tree.treeFromNodesArray(nodesToAdd);
         int no = Integer.parseInt(numberToDelete);
 
@@ -195,14 +198,16 @@ public class DeleteRecordActivity extends AppCompatActivity {
 
         ArrayList<Node> nodesToDelete = treeToAdd.getDeletedNodes(nodeToDelete);
         FirebaseDecorator.deleteCertainNodes(mAuth, db, nodesToDelete);
-        /*treeToAdd.RemovePatron(nodeToDelete);
-        FirebaseDecorator.deleteNodes(mAuth, db);
+        treeToAdd.RemovePatron(nodeToDelete);
+//        FirebaseDecorator.deleteNodes(mAuth, db);
         ArrayList<Node> nodesToPush = treeToAdd.toNodeArrayList();
-        FirebaseDecorator.pushNodes(mAuth, db, nodesToPush);*/
+//        FirebaseDecorator.pushNodes(mAuth, db, nodesToPush);
 
-
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        i.putExtra("treeNodes", nodesToPush);
+        startActivity(i);
         finish();
+
     }
 }
 

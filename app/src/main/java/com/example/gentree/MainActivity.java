@@ -63,9 +63,11 @@ public class MainActivity extends AppCompatActivity {
 
         final Graph graph = new Graph();
 
-        nodesArrayList = FirebaseDecorator.pullNodesArray(mAuth, db);
+
         //////////////TU WAZNE - linijka ponizej dziala!///////////////////
-//        nodesArrayList = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
+        nodesArrayList = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
+        if (nodesArrayList == null)
+            nodesArrayList = FirebaseDecorator.pullNodesArray(mAuth, db);
         Tree printTree = Tree.treeFromNodesArray(Objects.requireNonNull(nodesArrayList));
         for (Node node : printTree.toNodeArrayList())
             System.out.println(node.toJson(node.getNumberofParent()));
@@ -85,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
                 for (DefaultEdge edge : printTree.getGraph().outgoingEdgesOf(node)) {
                     Node modelSrc = printTree.getGraph().getEdgeSource(edge);
+
                     Node modelDst = printTree.getGraph().getEdgeTarget(edge);
 
                     final de.blox.graphview.Node src = new de.blox.graphview.Node(getNodeText(modelSrc));
@@ -138,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 //        return "" + node.getAttributes().get(NodeKeys.NAME);
         int dob = Integer.parseInt(Objects.requireNonNull(node.getAttributes().get(NodeKeys.DATE_OF_BIRTH)));
         int dod;
-        String result = "" + node.getAttributes().get(NodeKeys.NAME) + " " + node.getAttributes().get(NodeKeys.LAST_NAME) + "\n"
+        String result = "" + "id: " + node.getNumber() + "\n" + node.getAttributes().get(NodeKeys.NAME) + " " + node.getAttributes().get(NodeKeys.LAST_NAME) + "\n"
                 + dob + " - ";
         if (node.getAttributes().containsKey(NodeKeys.DATE_OF_DEATH)) {
             dod = Integer.parseInt(Objects.requireNonNull(node.getAttributes().get(NodeKeys.DATE_OF_DEATH)));

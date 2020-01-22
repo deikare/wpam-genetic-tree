@@ -180,15 +180,18 @@ public class EditNodeActivity extends AppCompatActivity {
 
         Map<String, String> attributes = new HashMap<>();
         attributes.put(NodeKeys.NAME, "edited");
-        attributes.put(NodeKeys.LAST_NAME, "");
-        attributes.put(NodeKeys.DATE_OF_BIRTH, "");
-        attributes.put(NodeKeys.DATE_OF_DEATH, "");
+        attributes.put(NodeKeys.LAST_NAME, "editedLName");
+        attributes.put(NodeKeys.DATE_OF_BIRTH, "1980");
+        /*attributes.put(NodeKeys.DATE_OF_DEATH, "");
         attributes.put(NodeKeys.EDUCATION, "");
         attributes.put(NodeKeys.WORK, "");
         attributes.put(NodeKeys.LOCATION, "");
-        attributes.put(NodeKeys.DESCRIPTION, "");
+        attributes.put(NodeKeys.DESCRIPTION, "");*/
 
-        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
+        ArrayList<Node> nodesToAdd = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
+        if (nodesToAdd == null)
+            nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
+//        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
         Tree treeToAdd = Tree.treeFromNodesArray(nodesToAdd);
 
         int no = Integer.parseInt(numberToEdit);
@@ -197,6 +200,7 @@ public class EditNodeActivity extends AppCompatActivity {
         if (beforeNode != null) {
             Node newNode = new Node(attributes, beforeNode.getNumber());
             newNode.setNumberofParent(beforeNode.getNumberofParent());
+            treeToAdd.EditPatron(beforeNode, newNode);
 
             FirebaseDecorator.editGivenNode(mAuth, db, newNode);
         }
@@ -211,8 +215,12 @@ public class EditNodeActivity extends AppCompatActivity {
         nodesToSend.add(newNode);
 
         FirebaseDecorator.pushNodes(mAuth, db, nodesToSend);*/
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        ArrayList<Node> nodesToPassFurther = treeToAdd.toNodeArrayList();
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        i.putExtra("treeNodes", nodesToPassFurther);
+        startActivity(i);
         finish();
+
 
     }
 }
