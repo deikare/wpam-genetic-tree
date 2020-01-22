@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +31,8 @@ public class EditNodeActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Button button;
     private EditText number;
+    private EditText name, lastName, dateOfBirth, dateOfDeath, work, location, education, description, parentNumber;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,154 +42,28 @@ public class EditNodeActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
+        name = findViewById(R.id.edit_node_name);
+        lastName = findViewById(R.id.edit_node_lname);
+        dateOfBirth = findViewById(R.id.edit_node_dob);
+        dateOfDeath = findViewById(R.id.edit_node_dod);
+        location = findViewById(R.id.edit_node_location);
+
         button = findViewById(R.id.edit_node_button);
         number = findViewById(R.id.edit_node_number);
-
-        /*button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String currentStringNo = number.getText().toString();
-                int no = Integer.parseInt(currentStringNo);
-
-                final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                db.collection("users")
-                        .whereEqualTo("userID", uid)
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot queryDocumentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                        queryDocumentSnapshot
-                                                .getReference()
-                                                .collection("treeSnap")
-                                                .get()
-                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                        if (task.isSuccessful()) {
-                                                            ArrayList<Node> nodes = new ArrayList<>();
-                                                            for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                                                nodes.add(documentSnapshot.toObject(Node.class));
-                                                            }
-
-                                                            Map<String, String> attributes = new HashMap<>();
-                                                            attributes.put(NodeKeys.NAME, "zmienione");
-                                                            attributes.put(NodeKeys.LAST_NAME, "");
-                                                            attributes.put(NodeKeys.DATE_OF_BIRTH, "");
-                                                            attributes.put(NodeKeys.DATE_OF_DEATH, "");
-                                                            attributes.put(NodeKeys.EDUCATION, "");
-                                                            attributes.put(NodeKeys.WORK, "");
-                                                            attributes.put(NodeKeys.LOCATION, "");
-                                                            attributes.put(NodeKeys.DESCRIPTION, "");
-
-                                                            Tree newTree = Tree.treeFromNodesArray(nodes);
-                                                            Node beforeNode = Tree.findNodeByNumber(nodes, no);
-                                                            Node newNode = new Node(attributes, beforeNode.getNumber());
-                                                            newNode.setNumberofParent(beforeNode.getNumberofParent());
-
-                                                            System.out.println("before:");
-                                                            System.out.println(newTree.toJson());
-                                                            newTree.EditPatron(beforeNode, newNode);
-                                                            System.out.println("after:");
-                                                            System.out.println(newTree.toJson());
-
-                                                            db.collection("users")
-                                                                    .whereEqualTo("userID", uid)
-                                                                    .get()
-                                                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                        @Override
-                                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                            if (task.isSuccessful()) {
-                                                                                for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                                                                    documentSnapshot.getReference()
-                                                                                            .collection("treeSnap")
-                                                                                            .get()
-                                                                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                                                @Override
-                                                                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                                                    if (task.isSuccessful()) {
-                                                                                                        System.out.println("usuwam");
-                                                                                                        for (QueryDocumentSnapshot queryDocumentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                                                                                            Node thisNode = queryDocumentSnapshot.toObject(Node.class);
-                                                                                                            System.out.println(thisNode.toJson(thisNode.getNumberofParent()));
-                                                                                                            queryDocumentSnapshot.getReference()
-                                                                                                                    .delete()
-                                                                                                                    *//*.addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                                                                        @Override
-                                                                                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                                                                                            Toast.makeText(getApplicationContext(), "Node deleted", Toast.LENGTH_SHORT).show();
-                                                                                                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                                                                                                            finish();
-                                                                                                                        }
-                                                                                                                    });*//*
-                                                                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                                                        @Override
-                                                                                                                        public void onSuccess(Void aVoid) {
-                                                                                                                            if (task.isSuccessful()) {
-
-                                                                                                                            }
-
-                                                                                                                        }
-                                                                                                                    });
-                                                                                                        }
-
-                                                                                                        db.collection("users")
-                                                                                                                .whereEqualTo("userID", uid)
-                                                                                                                .get()
-                                                                                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                                                                    @Override
-                                                                                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                                                                        if (task.isSuccessful()) {
-                                                                                                                            for (QueryDocumentSnapshot queryDocumentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                                                                                                                for (Node nodeToAdd : newTree.getGraph().vertexSet())
-                                                                                                                                    queryDocumentSnapshot.getReference()
-                                                                                                                                            .collection("treeSnap")
-                                                                                                                                            .add(nodeToAdd)
-                                                                                                                                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                                                                                                                @Override
-                                                                                                                                                public void onSuccess(DocumentReference documentReference) {
-                                                                                                                                                    System.out.println("dodaje");
-                                                                                                                                                }
-                                                                                                                                            });
-                                                                                                                                Toast.makeText(getApplicationContext(), "Node modified", Toast.LENGTH_SHORT).show();
-                                                                                                                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                                                                                                                finish();
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                });
-                                                                                                    }
-                                                                                                }
-                                                                                            });
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    });
-
-                                                        }
-                                                    }
-                                                });
-                                    }
-                                }
-                            }
-                        });
-            }
-        });*/
     }
 
     public void editNode(View view) {
         final String numberToEdit = number.getText().toString();
+        final String currentName = name.getText().toString();
+        final String currentLastName = lastName.getText().toString();
+        final String dob = dateOfBirth.getText().toString();
+        final String dod = dateOfDeath.getText().toString();
+//        final String currentWork = work.getText().toString();
+//        final String currentEducation = education.getText().toString();
+        final String currentLocation = location.getText().toString();
+//        final String currentDescription = description.getText().toString();
 
         Map<String, String> attributes = new HashMap<>();
-        attributes.put(NodeKeys.NAME, "edited");
-        attributes.put(NodeKeys.LAST_NAME, "editedLName");
-        attributes.put(NodeKeys.DATE_OF_BIRTH, "1980");
-        /*attributes.put(NodeKeys.DATE_OF_DEATH, "");
-        attributes.put(NodeKeys.EDUCATION, "");
-        attributes.put(NodeKeys.WORK, "");
-        attributes.put(NodeKeys.LOCATION, "");
-        attributes.put(NodeKeys.DESCRIPTION, "");*/
 
         ArrayList<Node> nodesToAdd = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
         if (nodesToAdd == null)
@@ -194,15 +71,102 @@ public class EditNodeActivity extends AppCompatActivity {
 //        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
         Tree treeToAdd = Tree.treeFromNodesArray(nodesToAdd);
 
-        int no = Integer.parseInt(numberToEdit);
+        if (TextUtils.isEmpty(numberToEdit)) {
+            number.setError("Cannot be empty");
+            return;
+        }
 
-        Node beforeNode = Tree.findNodeByNumber(nodesToAdd, no);
+        if (!TextUtils.isDigitsOnly(numberToEdit)) {
+            number.setError("Not a number");
+            return;
+        }
+
+        int no1 = Integer.parseInt(numberToEdit);
+        if (no1 < 0 || no1 > treeToAdd.getMaxNodeNumber()) {
+            number.setError("Id is from 0 to " + treeToAdd.getMaxNodeNumber());
+            return;
+        }
+
+        Node beforeNode = Tree.findNodeByNumber(nodesToAdd, no1);
+
+
+        boolean isChanged = false;
+
+        /*attributes.put(NodeKeys.NAME, currentName);
+        attributes.put(NodeKeys.LAST_NAME, currentLastName);
+        attributes.put(NodeKeys.DATE_OF_BIRTH, dob);*/
+        /*attributes.put(NodeKeys.DATE_OF_DEATH, "");
+        attributes.put(NodeKeys.EDUCATION, "");
+        attributes.put(NodeKeys.WORK, "");
+        attributes.put(NodeKeys.LOCATION, "");
+        attributes.put(NodeKeys.DESCRIPTION, "");*/
+
+
         if (beforeNode != null) {
+
+            if (beforeNode.getAttributes().containsKey(NodeKeys.DATE_OF_DEATH)) {
+                if (TextUtils.isEmpty(dod))
+                    attributes.put(NodeKeys.DATE_OF_DEATH, beforeNode.getAttributes().get(NodeKeys.DATE_OF_DEATH));
+            }
+            else if (!TextUtils.isEmpty(dod)) {
+                if (!TextUtils.isDigitsOnly(dod)) {
+                    dateOfDeath.setError("Bad format of field");
+                    return;
+                }
+                else {
+                    attributes.put(NodeKeys.DATE_OF_DEATH, dod);
+                    isChanged = true;
+                }
+            }
+
+
+            if (beforeNode.getAttributes().containsKey(NodeKeys.LOCATION)) {
+                if (TextUtils.isEmpty(currentLocation))
+                    attributes.put(NodeKeys.LOCATION, beforeNode.getAttributes().get(NodeKeys.LOCATION));
+            }
+            else if (!TextUtils.isEmpty(currentLocation)) {
+                isChanged = true;
+                attributes.put(NodeKeys.LOCATION, currentLocation);
+            }
+
+
+            if (TextUtils.isEmpty(currentName))
+                attributes.put(NodeKeys.NAME, beforeNode.getAttributes().get(NodeKeys.NAME));
+            else {
+                attributes.put(NodeKeys.NAME, currentName);
+                isChanged = true;
+            }
+
+
+            if (TextUtils.isEmpty(currentLastName))
+                attributes.put(NodeKeys.LAST_NAME, beforeNode.getAttributes().get(NodeKeys.LAST_NAME));
+            else {
+                isChanged = true;
+                attributes.put(NodeKeys.LAST_NAME, currentLastName);
+            }
+
+            if (TextUtils.isEmpty(dob))
+                attributes.put(NodeKeys.DATE_OF_BIRTH, beforeNode.getAttributes().get(NodeKeys.DATE_OF_BIRTH));
+            else {
+                if (!TextUtils.isDigitsOnly(dob)) {
+                    dateOfDeath.setError("Bad format of field");
+                    return;
+                }
+                else {
+                    attributes.put(NodeKeys.DATE_OF_BIRTH, dob);
+                    isChanged = true;
+                }
+            }
+
+
+
             Node newNode = new Node(attributes, beforeNode.getNumber());
             newNode.setNumberofParent(beforeNode.getNumberofParent());
             treeToAdd.EditPatron(beforeNode, newNode);
 
             FirebaseDecorator.editGivenNode(mAuth, db, newNode);
+            if (isChanged)
+                Toast.makeText(getApplicationContext(), "Node edited", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -215,12 +179,31 @@ public class EditNodeActivity extends AppCompatActivity {
         nodesToSend.add(newNode);
 
         FirebaseDecorator.pushNodes(mAuth, db, nodesToSend);*/
-        ArrayList<Node> nodesToPassFurther = treeToAdd.toNodeArrayList();
+        ArrayList<Node> nodesToPassFurther;
+        if (isChanged) {
+            nodesToPassFurther = treeToAdd.toNodeArrayList();
+        }
+        else {
+            nodesToPassFurther = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
+            if (nodesToPassFurther == null)
+                nodesToPassFurther = FirebaseDecorator.pullNodesArray(mAuth, db);
+        }
+//        nodesToPassFurther = treeToAdd.toNodeArrayList();
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         i.putExtra("treeNodes", nodesToPassFurther);
         startActivity(i);
         finish();
 
 
+    }
+
+    public void goToMenu(View view) {
+        ArrayList<Node> nodesToAdd = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
+        if (nodesToAdd == null)
+            nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        i.putExtra("treeNodes", nodesToAdd);
+        startActivity(i);
+        finish();
     }
 }

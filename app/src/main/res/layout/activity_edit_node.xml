@@ -1,35 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".EditNodeActivity">
 
     <Button
-        android:id="@+id/edit_node_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="312dp"
-        android:text="EDIT"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/edit_node_number"
-        app:layout_constraintStart_toStartOf="@+id/edit_node_number"
-        app:layout_constraintTop_toBottomOf="@+id/edit_node_number"
-        app:layout_constraintVertical_bias="1.0"
-        android:onClick="editNode"/>
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/buttongoback"
+        android:onClick="goToMenu"></Button>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".EditNodeActivity">
 
-    <EditText
-        android:id="@+id/edit_node_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="208dp"
-        android:ems="10"
-        android:hint="number"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <EditText
+            android:id="@+id/edit_node_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/first_node_place_of_residence"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/edit_node_dod"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/edit_node_dod"
+            app:layout_constraintTop_toBottomOf="@+id/edit_node_dod"
+            app:layout_constraintVertical_bias="0.052" />
+
+        <EditText
+            android:id="@+id/edit_node_dod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/first_node_date_of_death"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/edit_node_dob"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/edit_node_dob"
+            app:layout_constraintTop_toBottomOf="@+id/edit_node_dob"
+            app:layout_constraintVertical_bias="0.032" />
+
+        <EditText
+            android:id="@+id/edit_node_dob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/first_node_date_of_birth"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/edit_node_lname"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/edit_node_lname"
+            app:layout_constraintTop_toBottomOf="@+id/edit_node_lname"
+            app:layout_constraintVertical_bias="0.032" />
+
+        <EditText
+            android:id="@+id/edit_node_lname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Last name"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/edit_node_name"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/edit_node_name"
+            app:layout_constraintTop_toBottomOf="@+id/edit_node_name"
+            app:layout_constraintVertical_bias="0.035" />
+
+        <EditText
+            android:id="@+id/edit_node_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Name"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.074" />
+
+        <Button
+            android:id="@+id/edit_node_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="editNode"
+            android:text="EDIT"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/edit_node_number"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="@+id/edit_node_number"
+            app:layout_constraintTop_toBottomOf="@+id/edit_node_number"
+            app:layout_constraintVertical_bias="0.119" />
+
+        <EditText
+            android:id="@+id/edit_node_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Id of edited node"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/edit_node_location"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/edit_node_location"
+            app:layout_constraintTop_toBottomOf="@+id/edit_node_location"
+            app:layout_constraintVertical_bias="0.062" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class FirstNodeActivity extends AppCompatActivity {
-    private EditText name, lastName, dateOfBirth, dateOfDeath, work, location, education, description;
+    private EditText name, lastName, dateOfBirth, dateOfDeath,location/*, work, education, description*/;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
 
@@ -41,10 +41,11 @@ public class FirstNodeActivity extends AppCompatActivity {
         lastName = findViewById(R.id.first_add_node_last_name);
         dateOfBirth = findViewById(R.id.first_add_node_date_of_birth);
         dateOfDeath = findViewById(R.id.first_add_node_date_of_death);
-        work = findViewById(R.id.first_add_node_work);
         location = findViewById(R.id.first_add_node_location);
+        /*work = findViewById(R.id.first_add_node_work);
+
         education = findViewById(R.id.first_add_node_education);
-        description = findViewById(R.id.first_add_node_description);
+        description = findViewById(R.id.first_add_node_description);*/
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -127,10 +128,11 @@ public class FirstNodeActivity extends AppCompatActivity {
         final String currentLastName = lastName.getText().toString();
         final String dob = dateOfBirth.getText().toString();
         final String dod = dateOfDeath.getText().toString();
-        final String currentWork = work.getText().toString();
-        final String currentEducation = education.getText().toString();
         final String currentLocation = location.getText().toString();
-        final String currentDescription = description.getText().toString();
+        /*final String currentWork = work.getText().toString();
+        final String currentEducation = education.getText().toString();
+
+        final String currentDescription = description.getText().toString();*/
 
         if (TextUtils.isEmpty(currentName)) {
             name.setError("Name is required");
@@ -145,17 +147,34 @@ public class FirstNodeActivity extends AppCompatActivity {
             dateOfBirth.setError("Date of birth is required");
             return;
         }
+        else if (!TextUtils.isDigitsOnly(dob)) {
+            dateOfBirth.setError("Bad format of field");
+            return;
+        }
+
+
 
         Map<String, String> attributes = new HashMap<>();
         attributes.put(NodeKeys.NAME, currentName);
         attributes.put(NodeKeys.LAST_NAME, currentLastName);
         attributes.put(NodeKeys.DATE_OF_BIRTH, dob);
 
+
         if (!TextUtils.isEmpty(dod)) {
-            attributes.put(NodeKeys.DATE_OF_DEATH, dod);
+            if (!TextUtils.isDigitsOnly(dod)) {
+                dateOfDeath.setError("Bad format of field");
+                return;
+            }
+            else attributes.put(NodeKeys.DATE_OF_DEATH, dod);
         }
 
-        if (!TextUtils.isEmpty(currentEducation)) {
+
+        if (!TextUtils.isEmpty(currentLocation)) {
+            attributes.put(NodeKeys.LOCATION, currentLocation);
+        }
+
+
+        /*if (!TextUtils.isEmpty(currentEducation)) {
             attributes.put(NodeKeys.DATE_OF_DEATH, currentEducation);
         }
 
@@ -163,13 +182,10 @@ public class FirstNodeActivity extends AppCompatActivity {
             attributes.put(NodeKeys.DATE_OF_DEATH, currentWork);
         }
 
-        if (!TextUtils.isEmpty(currentLocation)) {
-            attributes.put(NodeKeys.DATE_OF_DEATH, currentLocation);
-        }
 
         if (!TextUtils.isEmpty(currentDescription)) {
             attributes.put(NodeKeys.DATE_OF_DEATH, currentDescription);
-        }
+        }*/
 
         /*attributes.put(NodeKeys.DATE_OF_DEATH, dod);
         attributes.put(NodeKeys.EDUCATION, currentEducation);

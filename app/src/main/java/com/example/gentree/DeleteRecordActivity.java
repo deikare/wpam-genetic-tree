@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +22,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -190,9 +193,21 @@ public class DeleteRecordActivity extends AppCompatActivity {
         ArrayList<Node> nodesToAdd = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
         if (nodesToAdd == null)
             nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
-//        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
         Tree treeToAdd = Tree.treeFromNodesArray(nodesToAdd);
+
+        if (!TextUtils.isDigitsOnly(numberToDelete)) {
+            nameToDelete.setError("Not a number");
+            return;
+        }
+
         int no = Integer.parseInt(numberToDelete);
+        if (no < 1 || no > treeToAdd.getMaxNodeNumber()) {
+            nameToDelete.setError("Id is from 1 to " + treeToAdd.getMaxNodeNumber());
+            return;
+        }
+
+
+//        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
 
         Node nodeToDelete = Tree.findNodeByNumber(nodesToAdd, no);
 
@@ -208,6 +223,16 @@ public class DeleteRecordActivity extends AppCompatActivity {
         startActivity(i);
         finish();
 
+    }
+
+    public void goToMenu(View view) {
+        ArrayList<Node> nodesToAdd = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
+        if (nodesToAdd == null)
+            nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        i.putExtra("treeNodes", nodesToAdd);
+        startActivity(i);
+        finish();
     }
 }
 

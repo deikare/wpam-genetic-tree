@@ -33,15 +33,6 @@
 
         ></Button>
     <Button
-        android:id="@+id/btn_options_read"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Tree details"
-        android:onClick="readTree"
-
-        ></Button>
-    <Button
         android:id="@+id/btn_options_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

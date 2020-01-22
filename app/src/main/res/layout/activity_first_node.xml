@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -25,7 +26,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.072" />
+            app:layout_constraintVertical_bias="0.065" />
 
         <EditText
             android:id="@+id/first_add_node_last_name"
@@ -39,7 +40,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/first_add_node_name"
             app:layout_constraintTop_toBottomOf="@+id/first_add_node_name"
-            app:layout_constraintVertical_bias="0.043" />
+            app:layout_constraintVertical_bias="0.03" />
 
         <EditText
             android:id="@+id/first_add_node_date_of_birth"
@@ -73,27 +74,14 @@
             android:id="@+id/first_add_node_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="insertFirstNode"
             android:text="@string/node_button_add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/first_add_node_date_of_death"
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="@+id/first_add_node_date_of_death"
-            app:layout_constraintTop_toBottomOf="@+id/first_add_node_description"
-            app:layout_constraintVertical_bias="0.385"
-            android:onClick="insertFirstNode"/>
-
-        <EditText
-            android:id="@+id/first_add_node_work"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/node_work"
-            android:inputType="textPersonName"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/first_add_node_date_of_death"
-            app:layout_constraintStart_toStartOf="@+id/first_add_node_date_of_death"
-            app:layout_constraintTop_toBottomOf="@+id/first_add_node_date_of_death"
-            app:layout_constraintVertical_bias="0.045" />
+            app:layout_constraintTop_toBottomOf="@+id/first_add_node_location"
+            app:layout_constraintVertical_bias="0.452" />
 
         <EditText
             android:id="@+id/first_add_node_location"
@@ -103,40 +91,12 @@
             android:hint="@string/node_place_of_residence"
             android:inputType="textPersonName"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/first_add_node_work"
+            app:layout_constraintEnd_toEndOf="@+id/first_add_node_date_of_death"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/first_add_node_work"
-            app:layout_constraintTop_toBottomOf="@+id/first_add_node_work"
-            app:layout_constraintVertical_bias="0.059" />
+            app:layout_constraintStart_toStartOf="@+id/first_add_node_date_of_death"
+            app:layout_constraintTop_toBottomOf="@+id/first_add_node_date_of_death"
+            app:layout_constraintVertical_bias="0.049" />
 
-        <EditText
-            android:id="@+id/first_add_node_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="144dp"
-            android:ems="10"
-            android:hint="@string/node_description"
-            android:inputType="textPersonName"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/first_add_node_education"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/first_add_node_education"
-            app:layout_constraintTop_toBottomOf="@+id/first_add_node_education"
-            app:layout_constraintVertical_bias="0.266" />
-
-        <EditText
-            android:id="@+id/first_add_node_education"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/education"
-            android:inputType="textPersonName"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/first_add_node_location"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/first_add_node_location"
-            app:layout_constraintTop_toBottomOf="@+id/first_add_node_location"
-            app:layout_constraintVertical_bias="0.074" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

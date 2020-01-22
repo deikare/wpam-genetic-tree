@@ -38,7 +38,7 @@
         android:layout_height="78dp"
         android:layout_marginTop="47dp"
         android:layout_marginBottom="70dp"
-        android:text="Button"
+        android:text="login"
         app:layout_constraintBottom_toTopOf="@+id/textView3"
         app:layout_constraintEnd_toEndOf="@+id/login_password"
         app:layout_constraintHorizontal_bias="0.496"

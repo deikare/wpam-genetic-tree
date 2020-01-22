@@ -141,13 +141,18 @@ public class MainActivity extends AppCompatActivity {
 //        return "" + node.getAttributes().get(NodeKeys.NAME);
         int dob = Integer.parseInt(Objects.requireNonNull(node.getAttributes().get(NodeKeys.DATE_OF_BIRTH)));
         int dod;
-        String result = "" + "id: " + node.getNumber() + "\n" + node.getAttributes().get(NodeKeys.NAME) + " " + node.getAttributes().get(NodeKeys.LAST_NAME) + "\n"
+        String result = "" + "id: " + node.getNumber() + "\n"
+                + node.getAttributes().get(NodeKeys.NAME) + " " + node.getAttributes().get(NodeKeys.LAST_NAME) + "\n"
                 + dob + " - ";
         if (node.getAttributes().containsKey(NodeKeys.DATE_OF_DEATH)) {
             dod = Integer.parseInt(Objects.requireNonNull(node.getAttributes().get(NodeKeys.DATE_OF_DEATH)));
             result += dod;
         }
         else result += "?";
+
+        if (node.getAttributes().containsKey(NodeKeys.LOCATION))
+            result += "\n"
+                    + node.getAttributes().get(NodeKeys.LOCATION);
 
         return result;
     }

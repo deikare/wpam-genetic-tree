@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,326 +47,30 @@ public class TryToGetParentsActivity extends AppCompatActivity {
 
         button = findViewById(R.id.new_parents_button);
         number = findViewById(R.id.new_parents_node_number);
-
-        /*button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String currentStringNo = number.getText().toString();
-                System.out.println("wchodze");
-                int no = Integer.parseInt(currentStringNo);
-
-                final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                *//*db.collection("users")
-                        .whereEqualTo("userID", uid)
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot queryDocumentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                        queryDocumentSnapshot
-                                                .getReference()
-                                                .collection("treeSnap")
-                                                .get()
-                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                        if (task.isSuccessful()) {
-                                                            ArrayList<Node> nodes = new ArrayList<>();
-                                                            for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                                                nodes.add(documentSnapshot.toObject(Node.class));
-                                                            }
-
-                                                            Tree newTree = Tree.treeFromNodesArray(nodes);
-                                                            Node testedNode = Tree.findNodeByNumber(nodes, no);
-                                                            if (newTree.getNodeParentsAmount(testedNode) < 2) {
-                                                                Task<QuerySnapshot> taskGetUsers = db.collection("users")
-                                                                        .get();
-                                                                try {
-                                                                    QuerySnapshot docs = Tasks.await(taskGetUsers);
-                                                                } catch (ExecutionException e) {
-                                                                    e.printStackTrace();
-                                                                } catch (InterruptedException e) {
-                                                                    e.printStackTrace();
-                                                                }
-                                                                if(taskGetUsers.isSuccessful()) {
-                                                                    for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(taskGetUsers.getResult())) {
-                                                                        if (!Objects.requireNonNull(documentSnapshot.getString("userID")).equals(uid)) {
-                                                                            Task<QuerySnapshot> taskGetTree =documentSnapshot.getReference()
-                                                                                    .collection("treeSnap")
-                                                                                    .get();
-                                                                            try {
-                                                                                QuerySnapshot docsTree = Tasks.await(taskGetTree);
-                                                                            } catch (ExecutionException e) {
-                                                                                e.printStackTrace();
-                                                                            } catch (InterruptedException e) {
-                                                                                e.printStackTrace();
-                                                                            }
-                                                                            if (taskGetTree.isSuccessful()) {
-                                                                                for (QueryDocumentSnapshot docs2 : Objects.requireNonNull(taskGetTree.getResult())) {
-                                                                                    if (!Objects.requireNonNull(docs2.getString("userID")).equals(uid)) {
-                                                                                        Task<QuerySnapshot>docs2.getReference()
-                                                                                                .collection("treeSnap")
-                                                                                                .get()
-                                                                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                                                    @Override
-                                                                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                                                        if (task.isSuccessful()) {
-                                                                                                            ArrayList<Node> nodes = new ArrayList<>();
-                                                                                                            for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                                                                                                nodes.add(documentSnapshot.toObject(Node.class));
-                                                                                                            }
-                                                                                                            Tree subjectedTree = Tree.treeFromNodesArray(nodes);
-                                                                                                            ArrayList<Node> protoParents = Tree.searchForParents(testedNode, subjectedTree.getGraph());
-                                                                                                            if (protoParents != null) {
-                                                                                                                if (newTree.getNodeParentsAmount(testedNode) < 2) {
-                                                                                                                    for (Node parent : protoParents) {
-                                                                                                                        if (newTree.getNodeParentsAmount(testedNode) < 2) {
-                                                                                                                            parent.setNumber(newTree.getMaxNodeNumber() + 1);
-                                                                                                                            parent.setNumberofParent(testedNode.getNumber());
-                                                                                                                            newTree.AddPatron(testedNode, parent);
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-
-                                                                                                                db.collection("users")
-                                                                                                                        .whereEqualTo("userID", uid)
-                                                                                                                        .get()
-                                                                                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                                                                            @Override
-                                                                                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                                                                                if (task.isSuccessful()) {
-                                                                                                                                    for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                                                                                                                        documentSnapshot.getReference()
-                                                                                                                                                .collection("treeSnap")
-                                                                                                                                                .get()
-                                                                                                                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                                                                                                    @Override
-                                                                                                                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                                                                                                        if (task.isSuccessful()) {
-                                                                                                                                                            System.out.println("usuwam");
-                                                                                                                                                            for (QueryDocumentSnapshot queryDocumentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                                                                                                                                                Node thisNode = queryDocumentSnapshot.toObject(Node.class);
-                                                                                                                                                                System.out.println(thisNode.toJson(thisNode.getNumberofParent()));
-                                                                                                                                                                queryDocumentSnapshot.getReference()
-                                                                                                                                                                        .delete()
-                                                                                                                                                                        *//**//*.addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                                                                                                                            @Override
-                                                                                                                                                                            public void onComplete(@NonNull Task<Void> task) {
-                                                                                                                                                                                Toast.makeText(getApplicationContext(), "Node deleted", Toast.LENGTH_SHORT).show();
-                                                                                                                                                                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                                                                                                                                                                finish();
-                                                                                                                                                                            }
-                                                                                                                                                                        });*//**//*
-                                                                                                                                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                                                                                                            @Override
-                                                                                                                                                                            public void onSuccess(Void aVoid) {
-                                                                                                                                                                                if (task.isSuccessful()) {
-
-                                                                                                                                                                                }
-
-                                                                                                                                                                            }
-                                                                                                                                                                        });
-                                                                                                                                                            }
-
-                                                                                                                                                                *//**//*db.collection("users")
-                                                                                                                                                                        .whereEqualTo("userID", uid)
-                                                                                                                                                                        .get()
-                                                                                                                                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                                                                                                                            @Override
-                                                                                                                                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                                                                                                                                if (task.isSuccessful()) {
-                                                                                                                                                                                    for (QueryDocumentSnapshot queryDocumentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                                                                                                                                                                        Tree toSend = newTree.deleteDuplicats();
-                                                                                                                                                                                        for (Node nodeToAdd : toSend.getGraph().vertexSet())
-                                                                                                                                                                                            queryDocumentSnapshot.getReference()
-                                                                                                                                                                                                    .collection("treeSnap")
-                                                                                                                                                                                                    .add(nodeToAdd)
-                                                                                                                                                                                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                                                                                                                                                                        @Override
-                                                                                                                                                                                                        public void onSuccess(DocumentReference documentReference) {
-                                                                                                                                                                                                            System.out.println("dodaje");
-                                                                                                                                                                                                        }
-                                                                                                                                                                                                    });
-                                                                                                                                                                                        Toast.makeText(getApplicationContext(), "Parents added", Toast.LENGTH_SHORT).show();
-                                                                                                                                                                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                                                                                                                                                                        finish();
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                            }
-                                                                                                                                                                        });*//**//*
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                });
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        });
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-
-                                                                                                });
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-
-                                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                            @Override
-                                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                                if (task.isSuccessful()) {
-                                                                                    for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                                                                        if (!Objects.requireNonNull(documentSnapshot.getString("userID")).equals(uid)) {
-                                                                                            documentSnapshot.getReference()
-                                                                                                    .collection("treeSnap")
-                                                                                                    .get()
-                                                                                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                                                        @Override
-                                                                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                                                            if (task.isSuccessful()) {
-                                                                                                                ArrayList<Node> nodes = new ArrayList<>();
-                                                                                                                for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                                                                                                    nodes.add(documentSnapshot.toObject(Node.class));
-                                                                                                                }
-                                                                                                                Tree subjectedTree = Tree.treeFromNodesArray(nodes);
-                                                                                                                ArrayList<Node> protoParents = Tree.searchForParents(testedNode, subjectedTree.getGraph());
-                                                                                                                if (protoParents != null) {
-                                                                                                                    if (newTree.getNodeParentsAmount(testedNode) < 2) {
-                                                                                                                        for (Node parent : protoParents) {
-                                                                                                                            if (newTree.getNodeParentsAmount(testedNode) < 2) {
-                                                                                                                                parent.setNumber(newTree.getMaxNodeNumber() + 1);
-                                                                                                                                parent.setNumberofParent(testedNode.getNumber());
-                                                                                                                                newTree.AddPatron(testedNode, parent);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-
-                                                                                                                    db.collection("users")
-                                                                                                                            .whereEqualTo("userID", uid)
-                                                                                                                            .get()
-                                                                                                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                                                                                @Override
-                                                                                                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                                                                                    if (task.isSuccessful()) {
-                                                                                                                                        for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                                                                                                                            documentSnapshot.getReference()
-                                                                                                                                                    .collection("treeSnap")
-                                                                                                                                                    .get()
-                                                                                                                                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                                                                                                        @Override
-                                                                                                                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                                                                                                            if (task.isSuccessful()) {
-                                                                                                                                                                System.out.println("usuwam");
-                                                                                                                                                                for (QueryDocumentSnapshot queryDocumentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                                                                                                                                                    Node thisNode = queryDocumentSnapshot.toObject(Node.class);
-                                                                                                                                                                    System.out.println(thisNode.toJson(thisNode.getNumberofParent()));
-                                                                                                                                                                    queryDocumentSnapshot.getReference()
-                                                                                                                                                                            .delete()
-                                                                                                                                                                            *//**//*.addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                                                                                                                                @Override
-                                                                                                                                                                                public void onComplete(@NonNull Task<Void> task) {
-                                                                                                                                                                                    Toast.makeText(getApplicationContext(), "Node deleted", Toast.LENGTH_SHORT).show();
-                                                                                                                                                                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                                                                                                                                                                    finish();
-                                                                                                                                                                                }
-                                                                                                                                                                            });*//**//*
-                                                                                                                                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                                                                                                                @Override
-                                                                                                                                                                                public void onSuccess(Void aVoid) {
-                                                                                                                                                                                    if (task.isSuccessful()) {
-
-                                                                                                                                                                                    }
-
-                                                                                                                                                                                }
-                                                                                                                                                                            });
-                                                                                                                                                                }
-
-                                                                                                                                                                *//**//*db.collection("users")
-                                                                                                                                                                        .whereEqualTo("userID", uid)
-                                                                                                                                                                        .get()
-                                                                                                                                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                                                                                                                            @Override
-                                                                                                                                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                                                                                                                                if (task.isSuccessful()) {
-                                                                                                                                                                                    for (QueryDocumentSnapshot queryDocumentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                                                                                                                                                                        Tree toSend = newTree.deleteDuplicats();
-                                                                                                                                                                                        for (Node nodeToAdd : toSend.getGraph().vertexSet())
-                                                                                                                                                                                            queryDocumentSnapshot.getReference()
-                                                                                                                                                                                                    .collection("treeSnap")
-                                                                                                                                                                                                    .add(nodeToAdd)
-                                                                                                                                                                                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                                                                                                                                                                        @Override
-                                                                                                                                                                                                        public void onSuccess(DocumentReference documentReference) {
-                                                                                                                                                                                                            System.out.println("dodaje");
-                                                                                                                                                                                                        }
-                                                                                                                                                                                                    });
-                                                                                                                                                                                        Toast.makeText(getApplicationContext(), "Parents added", Toast.LENGTH_SHORT).show();
-                                                                                                                                                                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                                                                                                                                                                        finish();
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                            }
-                                                                                                                                                                        });*//**//*
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                    });
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            });
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-
-                                                                                                    });
-                                                                                        }
-                                                                                    }
-                                                                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                                                                    finish();
-                                                                                }
-
-                                                                            }
-                                                                        });
-                                                            }
-                                                            else {
-                                                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                                                finish();
-                                                            }
-
-
-
-                                                        }
-                                                    }
-                                                });
-                                    }
-                                }
-                            }
-                        });*//*
-            }*/
-//        });
     }
 
     public void searchAndUpdateParents(View view) {
         final String numberToUpdate = number.getText().toString();
 
-        int no = Integer.parseInt(numberToUpdate);
-
-
-        /*for (ArrayList<Node> nodes : arrayListOfNodeList) {
-            System.out.println("newArray");
-            for (Node node : nodes)
-                System.out.println("\t" + node.toJson(node.getNumberofParent()));
-        }*/
         ArrayList<Node> thisTreeNodes = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
         if (thisTreeNodes == null)
             thisTreeNodes = FirebaseDecorator.pullNodesArray(mAuth, db);
-//        ArrayList<Node> thisTreeNodes = FirebaseDecorator.pullNodesArray(mAuth, db);
-        Node checkedNode = Tree.findNodeByNumber(thisTreeNodes, no);
         Tree thisTree = Tree.treeFromNodesArray(thisTreeNodes);
+
+        if (!TextUtils.isDigitsOnly(numberToUpdate)) {
+            number.setError("Not a number");
+            return;
+        }
+        int no = Integer.parseInt(numberToUpdate);
+        if(no < 0 || no > thisTree.getMaxNodeNumber()) {
+            number.setError("Id is from 0 to " + thisTree.getMaxNodeNumber());
+            return;
+        }
+
+        Node checkedNode = Tree.findNodeByNumber(thisTreeNodes, no);
+
         if (checkedNode != null) {
+            System.out.println(checkedNode.toJson(checkedNode.getNumberofParent()));
             if (thisTree.getNodeParentsAmount(checkedNode) < 2) {
                 boolean isTreeEdited = false;
                 ArrayList<ArrayList<Node>> arrayListOfNodeList = FirebaseDecorator.getArrayListsFromAllTrees(mAuth, db);
@@ -384,23 +89,11 @@ public class TryToGetParentsActivity extends AppCompatActivity {
                         ArrayList<Node> parentList = Tree.searchForParents(checkedNode, subjectedTree.getGraph());
                         if (parentList != null) {
                             for (Node parentToInsert : parentList) {
-                                boolean wouldBePair = true;
-
-                                for (Node currentParent : parentsOfCheckedNode) {
-                                    if (currentParent.getAttributes().equals(parentToInsert.getAttributes())) {
-                                        wouldBePair = true;
-                                        break;
-                                    }
-                                    else wouldBePair = false;
-                                }
-                                
-                                if (!wouldBePair) {
-                                    parentToInsert.setNumber(thisTree.getMaxNodeNumber() + 1);
-                                    parentToInsert.setNumberofParent(checkedNode.getNumber());
-                                    thisTree.AddPatron(checkedNode, parentToInsert);
-                                    nodesToSend.add(parentToInsert);
-                                    isTreeEdited = true;
-                                }
+                                parentToInsert.setNumber(thisTree.getMaxNodeNumber() + 1);
+                                parentToInsert.setNumberofParent(checkedNode.getNumber());
+                                thisTree.AddPatron(checkedNode, parentToInsert);
+                                nodesToSend.add(parentToInsert);
+                                isTreeEdited = true;
                             }
                         }
                     }
@@ -444,6 +137,16 @@ public class TryToGetParentsActivity extends AppCompatActivity {
         ArrayList<Node> nodesToPassFurther = thisTree.toNodeArrayList();
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         i.putExtra("treeNodes", nodesToPassFurther);
+        startActivity(i);
+        finish();
+    }
+
+    public void goToMenu(View view) {
+        ArrayList<Node> nodesToAdd = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
+        if (nodesToAdd == null)
+            nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        i.putExtra("treeNodes", nodesToAdd);
         startActivity(i);
         finish();
     }

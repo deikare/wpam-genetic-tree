@@ -44,10 +44,10 @@ public class AddNewNodeActivity extends AppCompatActivity {
         lastName = findViewById(R.id.add_node_last_name);
         dateOfBirth = findViewById(R.id.add_node_date_of_birth);
         dateOfDeath = findViewById(R.id.add_node_date_of_death);
-        work = findViewById(R.id.add_node_work);
+//        work = findViewById(R.id.add_node_work);
         location = findViewById(R.id.add_node_location);
-        education = findViewById(R.id.add_node_education);
-        description = findViewById(R.id.add_node_description);
+//        education = findViewById(R.id.add_node_education);
+//        description = findViewById(R.id.add_node_description);
         parentNumber = findViewById(R.id.add_node_parentNo);
 
 
@@ -163,19 +163,21 @@ public class AddNewNodeActivity extends AppCompatActivity {
         final String currentLastName = lastName.getText().toString();
         final String dob = dateOfBirth.getText().toString();
         final String dod = dateOfDeath.getText().toString();
-        final String currentWork = work.getText().toString();
-        final String currentEducation = education.getText().toString();
+//        final String currentWork = work.getText().toString();
+//        final String currentEducation = education.getText().toString();
         final String currentLocation = location.getText().toString();
-        final String currentDescription = description.getText().toString();
+//        final String currentDescription = description.getText().toString();
         final String currentParentNo = parentNumber.getText().toString();
 
         Map<String, String> attributes = new HashMap<>();
+
         if (TextUtils.isEmpty(currentName)) {
             name.setError("Name is required");
             return;
         }
+
         if (TextUtils.isEmpty(currentLastName)) {
-            lastName.setError("Password is required");
+            lastName.setError("Last name is required");
             return;
         }
 
@@ -183,16 +185,62 @@ public class AddNewNodeActivity extends AppCompatActivity {
             dateOfBirth.setError("Date of birth is required");
             return;
         }
+        else {
+            if (!TextUtils.isDigitsOnly(dob)) {
+                dateOfBirth.setError("Bad format of field");
+                return;
+            }
+        }
 
         attributes.put(NodeKeys.NAME, currentName);
         attributes.put(NodeKeys.LAST_NAME, currentLastName);
         attributes.put(NodeKeys.DATE_OF_BIRTH, dob);
 
         if (!TextUtils.isEmpty(dod)) {
-            attributes.put(NodeKeys.DATE_OF_DEATH, dod);
+            if (!TextUtils.isDigitsOnly(dod)) {
+                dateOfDeath.setError("Bad format of field");
+                return;
+            }
+            else attributes.put(NodeKeys.DATE_OF_DEATH, dod);
         }
 
-        if (!TextUtils.isEmpty(currentEducation)) {
+        if (!TextUtils.isEmpty(currentLocation)) {
+            attributes.put(NodeKeys.LOCATION, currentLocation);
+        }
+
+        if (TextUtils.isEmpty(currentParentNo)) {
+            parentNumber.setError("Cannot be empty");
+            return;
+        }
+
+        if (!TextUtils.isDigitsOnly(currentParentNo)) {
+            parentNumber.setError("Not a number");
+            return;
+        }
+
+        ArrayList<Node> nodesToAdd = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
+        if (nodesToAdd == null)
+            nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
+//        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
+        Tree treeToAdd = Tree.treeFromNodesArray(nodesToAdd);
+
+        if (TextUtils.isEmpty(currentParentNo)) {
+            parentNumber.setError("Field is empty");
+            return;
+        }
+
+        if (!TextUtils.isDigitsOnly(currentParentNo)) {
+            parentNumber.setError("Not a number");
+            return;
+        }
+
+        int no1 = Integer.parseInt(currentParentNo);
+        if (no1 < 0 || no1 > treeToAdd.getMaxNodeNumber()) {
+            parentNumber.setError("Id is from 0 to " + treeToAdd.getMaxNodeNumber());
+            return;
+        }
+
+        /*if (!TextUtils.isEmpty(currentEducation)) {
             attributes.put(NodeKeys.DATE_OF_DEATH, currentEducation);
         }
 
@@ -200,21 +248,15 @@ public class AddNewNodeActivity extends AppCompatActivity {
             attributes.put(NodeKeys.DATE_OF_DEATH, currentWork);
         }
 
-        if (!TextUtils.isEmpty(currentLocation)) {
-            attributes.put(NodeKeys.DATE_OF_DEATH, currentLocation);
-        }
+
 
         if (!TextUtils.isEmpty(currentDescription)) {
             attributes.put(NodeKeys.DATE_OF_DEATH, currentDescription);
-        }
+        }*/
 
-        int no1 = Integer.parseInt(currentParentNo);
 
-        ArrayList<Node> nodesToAdd = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
-        if (nodesToAdd == null)
-            nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
-//        ArrayList<Node> nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
-        Tree treeToAdd = Tree.treeFromNodesArray(nodesToAdd);
+
+
         Node child = Tree.findNodeByNumber(nodesToAdd, no1);
         ArrayList<Node> nodesPassedFurther = null;
         if (child != null) {
@@ -247,38 +289,15 @@ public class AddNewNodeActivity extends AppCompatActivity {
         finish();
     }
 
-/*
-    public void addNode(View view) {
-        final String currentName = name.getText().toString();
-        final String currentLastName = lastName.getText().toString();
-        final String dob = dateOfBirth.getText().toString();
-        final String dod = dateOfDeath.getText().toString();
-
-        final String userID = mAuth.getCurrentUser().getUid();
-        db.collection("users")
-                .whereEqualTo("userID", userID)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            ArrayList<String> userList = new ArrayList<>();
-                            userList.add(userID);
-                            Map<String, String> attributes = new HashMap<>();
-                            attributes.put(NodeKeys.NAME, currentName);
-                            attributes.put(NodeKeys.LAST_NAME, currentLastName);
-                            attributes.put(NodeKeys.DATE_OF_BIRTH, dob);
-                            attributes.put(NodeKeys.DATE_OF_DEATH, dod);
-                            Node newNode = new Node(userList, attributes);
-
-                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                documentSnapshot.getReference()
-                                        .collection("Nodes")
-                                        .add(newNode);
-                            }
-                        }
-                    }
-                });
+    public void goToMenu(View view) {
+        ArrayList<Node> nodesToAdd = (ArrayList<Node>)getIntent().getSerializableExtra("treeNodes");
+        if (nodesToAdd == null)
+            nodesToAdd = FirebaseDecorator.pullNodesArray(mAuth, db);
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        i.putExtra("treeNodes", nodesToAdd);
+        startActivity(i);
+        finish();
     }
-*/
+
+
 }
