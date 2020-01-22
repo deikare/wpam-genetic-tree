@@ -43,7 +43,6 @@ public class FirebaseDecorator {
                 }
                 if (taskGetUsers.isSuccessful()) {
                     for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(taskGetUsers.getResult())) {
-                        System.out.println("dobieram sie do usera");
                         Task<Void> getTreeSnapTask = documentSnapshot.getReference()
                                 .collection("treeSnap")
                                 .document("" + toSend.getNumber())
@@ -86,7 +85,6 @@ public class FirebaseDecorator {
                 }
                 if (taskUser.isSuccessful()) {
                     for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(taskUser.getResult())) {
-                        System.out.println("dobieram sie do usera");
                         Task<QuerySnapshot> getTreeSnapTask = documentSnapshot.getReference()
                                 .collection("treeSnap")
                                 .get();
@@ -257,38 +255,6 @@ public class FirebaseDecorator {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        /*db.collection("users")
-                .whereEqualTo("userID", userID)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            Map<String, String> treeSnap = new HashMap<>();
-                            for (Node node : gentree.getGraph().vertexSet()) {
-                                for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
-                                    documentSnapshot.getReference()
-                                            .collection("treeSnap")
-                                            .add(node)
-                                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                @Override
-                                                public void onSuccess(DocumentReference documentReference) {
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-
-                                                }
-                                            });
-                                }
-                            }
-
-
-                        }
-
-                    }
-        });*/
     }
 
     public static ArrayList<Node> pullNodesArray(FirebaseAuth mAuth, FirebaseFirestore db) {
@@ -329,21 +295,7 @@ public class FirebaseDecorator {
                         }
                     }
                 }
-                /*nodes.sort(new Comparator<Node>() {
-                    @Override
-                    public int compare(Node node, Node t1) {
-                        return node.getNumberofParent() - t1.getNumberofParent();
-                    }
-                });
-                for (Node node : nodes) {
-                    Node child = null;
-                    if (node.getNumber() != 0)
-                        child = Tree.findNodeByNumber(nodes, node.getNumberofParent());
-                    newTree.AddPatron(child, node);
-                }
-                for (Node node : nodes)
-                    System.out.println(node.toJson(node.getNumberofParent()));
-                System.out.println("w watku");*/
+
             }
         });
         thread.start();
@@ -373,7 +325,6 @@ public class FirebaseDecorator {
                 }
                 if (taskUser.isSuccessful()) {
                     for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(taskUser.getResult())) {
-//                        System.out.println("kolejny user");
                         if (!documentSnapshot.get("userID").equals(userID)) {
 
                             ArrayList<Node> nodesFromUser = new ArrayList<>();
@@ -390,7 +341,6 @@ public class FirebaseDecorator {
 
                             if (docsTreeSnapTask.isSuccessful()) {
                                 for (QueryDocumentSnapshot queryDocumentSnapshots : Objects.requireNonNull(docsTreeSnapTask.getResult())) {
-//                                    System.out.println("node: " + queryDocumentSnapshots.toObject(Node.class));
                                     nodesFromUser.add(queryDocumentSnapshots.toObject(Node.class));
                                 }
                                 result.add(nodesFromUser);

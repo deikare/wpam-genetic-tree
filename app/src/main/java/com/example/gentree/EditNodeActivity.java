@@ -94,30 +94,34 @@ public class EditNodeActivity extends AppCompatActivity {
 
         if (beforeNode != null) {
 
-            if (beforeNode.getAttributes().containsKey(NodeKeys.DATE_OF_DEATH)) {
-                if (TextUtils.isEmpty(dod))
-                    attributes.put(NodeKeys.DATE_OF_DEATH, beforeNode.getAttributes().get(NodeKeys.DATE_OF_DEATH));
-            }
-            else if (!TextUtils.isEmpty(dod)) {
+
+            if (!TextUtils.isEmpty(dod)) {
                 if (!TextUtils.isDigitsOnly(dod)) {
                     dateOfDeath.setError("Bad format of field");
                     return;
-                }
-                else {
+                } else {
                     attributes.put(NodeKeys.DATE_OF_DEATH, dod);
                     isChanged = true;
                 }
             }
-
-
-            if (beforeNode.getAttributes().containsKey(NodeKeys.LOCATION)) {
-                if (TextUtils.isEmpty(currentLocation))
-                    attributes.put(NodeKeys.LOCATION, beforeNode.getAttributes().get(NodeKeys.LOCATION));
+            else {
+                if (beforeNode.getAttributes().containsKey(NodeKeys.DATE_OF_DEATH)) {
+                    if (TextUtils.isEmpty(dod))
+                        attributes.put(NodeKeys.DATE_OF_DEATH, beforeNode.getAttributes().get(NodeKeys.DATE_OF_DEATH));
+                }
             }
-            else if (!TextUtils.isEmpty(currentLocation)) {
+
+            if (!TextUtils.isEmpty(currentLocation)) {
                 isChanged = true;
                 attributes.put(NodeKeys.LOCATION, currentLocation);
             }
+            else {
+                if (beforeNode.getAttributes().containsKey(NodeKeys.LOCATION)) {
+                    if (TextUtils.isEmpty(currentLocation))
+                        attributes.put(NodeKeys.LOCATION, beforeNode.getAttributes().get(NodeKeys.LOCATION));
+                }
+            }
+
 
 
             if (TextUtils.isEmpty(currentName))

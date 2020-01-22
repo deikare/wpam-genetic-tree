@@ -231,4 +231,3 @@ public class DeleteRecordActivity extends AppCompatActivity {
         finish();
     }
 }
-
