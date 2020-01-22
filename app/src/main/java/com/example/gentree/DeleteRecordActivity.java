@@ -218,6 +218,7 @@ public class DeleteRecordActivity extends AppCompatActivity {
         ArrayList<Node> nodesToPush = treeToAdd.toNodeArrayList();
 //        FirebaseDecorator.pushNodes(mAuth, db, nodesToPush);
 
+        Toast.makeText(getApplicationContext(), "Node deleted", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         i.putExtra("treeNodes", nodesToPush);
         startActivity(i);

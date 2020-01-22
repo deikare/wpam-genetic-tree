@@ -280,7 +280,7 @@ public class AddNewNodeActivity extends AppCompatActivity {
         }
 
 
-
+        Toast.makeText(getApplicationContext(), "Created new node", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         if (nodesPassedFurther != null)
             i.putExtra("treeNodes", nodesPassedFurther);

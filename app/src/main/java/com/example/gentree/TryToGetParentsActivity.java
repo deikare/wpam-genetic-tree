@@ -24,6 +24,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jgrapht.graph.DefaultEdge;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -70,6 +71,13 @@ public class TryToGetParentsActivity extends AppCompatActivity {
         Node checkedNode = Tree.findNodeByNumber(thisTreeNodes, no);
 
         if (checkedNode != null) {
+            ArrayList<Node> actualChildren = new ArrayList<>();
+
+            for (DefaultEdge edge : thisTree.getGraph().outgoingEdgesOf(checkedNode)) {
+                Node child = thisTree.getGraph().getEdgeTarget(edge);
+                actualChildren.add(child);
+            }
+
             System.out.println(checkedNode.toJson(checkedNode.getNumberofParent()));
             if (thisTree.getNodeParentsAmount(checkedNode) < 2) {
                 boolean isTreeEdited = false;
@@ -77,23 +85,34 @@ public class TryToGetParentsActivity extends AppCompatActivity {
 
                 ArrayList<Node> nodesToSend = new ArrayList<>();
 
-                ArrayList<Node> parentsOfCheckedNode = new ArrayList<>();
-                for (DefaultEdge edge : thisTree.getGraph().outgoingEdgesOf(checkedNode)) {
-                    Node parent = thisTree.getGraph().getEdgeTarget(edge);
-                    parentsOfCheckedNode.add(parent);
-                }
-
                 for (ArrayList<Node> nodes : arrayListOfNodeList) {
+                    ArrayList<Node> parentsOfCheckedNode = new ArrayList<>();
+                    for (DefaultEdge edge : thisTree.getGraph().outgoingEdgesOf(checkedNode)) {
+                        Node parent = thisTree.getGraph().getEdgeTarget(edge);
+                        parentsOfCheckedNode.add(parent);
+                    }
+
                     if (thisTree.getNodeParentsAmount(checkedNode) < 2) {
                         Tree subjectedTree = Tree.treeFromNodesArray(nodes);
                         ArrayList<Node> parentList = Tree.searchForParents(checkedNode, subjectedTree.getGraph());
                         if (parentList != null) {
                             for (Node parentToInsert : parentList) {
-                                parentToInsert.setNumber(thisTree.getMaxNodeNumber() + 1);
-                                parentToInsert.setNumberofParent(checkedNode.getNumber());
-                                thisTree.AddPatron(checkedNode, parentToInsert);
-                                nodesToSend.add(parentToInsert);
-                                isTreeEdited = true;
+                                boolean wouldBePair = false;
+
+                                for (Node actualChild : actualChildren) {
+                                    if (actualChild.getAttributes().equals(parentToInsert.getAttributes())) {
+                                        wouldBePair = true;
+                                        break;
+                                    }
+                                }
+
+                                if(!wouldBePair) {
+                                    parentToInsert.setNumber(thisTree.getMaxNodeNumber() + 1);
+                                    parentToInsert.setNumberofParent(checkedNode.getNumber());
+                                    thisTree.AddPatron(checkedNode, parentToInsert);
+                                    nodesToSend.add(parentToInsert);
+                                    isTreeEdited = true;
+                                }
                             }
                         }
                     }
@@ -102,6 +121,10 @@ public class TryToGetParentsActivity extends AppCompatActivity {
                 if (isTreeEdited) {
 //                    FirebaseDecorator.deleteNodes(mAuth, db);
                     FirebaseDecorator.pushNodes(mAuth, db, nodesToSend);
+                    Toast.makeText(getApplicationContext(), "Node(s) added", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "No new nodes", Toast.LENGTH_SHORT).show();
                 }
             }
         }
